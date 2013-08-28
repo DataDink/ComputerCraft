@@ -158,6 +158,8 @@ end
 	local label = os.getComputerLabel();
 	if (label == nil) then return; end
 	local labelUrl = rootUrl .. label .. "/";
+	local dump = http.get(labelUrl).readAll();
+	print(dump);
 	local labelDir = json.parse(http.get(labelUrl).readAll());
 	if (labelDir.message == "Not Found") then return; end
 	loadDirectory(labelDir);
