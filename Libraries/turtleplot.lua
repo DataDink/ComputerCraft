@@ -173,6 +173,11 @@ if (turtleplot == nil) then
 			end
 		end
 		
+		position.plotTo = function(x, y, z)
+		
+		end
+		
+		turtleplot.moveTo = function(x, y, z) return position.plotTo(x, y, z); end
 		
 	end)();
 	
