@@ -148,8 +148,7 @@ end
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
-				print(fileRaw);
-				loadstring(fileRaw);
+				loadstring(fileRaw)();
 			end
 		end
 	end
