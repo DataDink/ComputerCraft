@@ -140,11 +140,8 @@ end
 		return string.gsub(fileInfo["html_url"], blobUrlRoot, rawUrlRoot);
 	end
 
-	local label = os.getComputerLabel();
 	local rootUrl = "https://api.github.com/repos/" .. configuration.Username .. "/" .. configuration.Repository .. "/contents/";
 	local rootDir = json.parse(http.get(rootUrl).readAll());
-	local labelUrl = rootUrl .. label .. "/";
-	local labelDir = json.parse(http.get(labelUrl).readAll());
 	
 	local loadDirectory = function(directory)
 		for index, fileInfo in pairs(directory) do
@@ -158,6 +155,11 @@ end
 	end
 	
 	loadDirectory(rootDir);
+	
+	local label = os.getComputerLabel();
+	if (label == nil) then return; end
+	local labelUrl = rootUrl .. label .. "/";
+	local labelDir = json.parse(http.get(labelUrl).readAll());
 	if (labelDir.message == "Not Found") then return; end
 	loadDirectory(labelDir);
 	
