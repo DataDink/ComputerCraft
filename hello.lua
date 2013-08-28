@@ -1,2 +1,1 @@
-print("Dink Loader 1.0");
-print("Status: Success");
+print("::DataDink Systems Loaded::");
