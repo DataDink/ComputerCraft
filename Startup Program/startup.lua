@@ -147,7 +147,7 @@ end
 	local labelDir = json.parse(http.get(labelUrl).readAll());
 	
 	local loadDirectory = function(directory)
-		foreach index, fileInfo in pairs(directory) do
+		for index, fileInfo in pairs(directory) do
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				print(fileInfo.name);
 				local fileUrl = getRaw(fileInfo);
