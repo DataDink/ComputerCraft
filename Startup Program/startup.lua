@@ -158,6 +158,7 @@ end
 	local label = os.getComputerLabel();
 	if (label == nil) then return; end
 	local labelUrl = rootUrl .. label .. "/";
+	print(labelUrl);
 	local dump = http.get(labelUrl).readAll();
 	print(dump);
 	local labelDir = json.parse(http.get(labelUrl).readAll());
