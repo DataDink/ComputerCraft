@@ -146,10 +146,9 @@ end
 	local loadDirectory = function(directory)
 		for index, fileInfo in pairs(directory) do
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
-				print(fileInfo.name);
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
-				loadString(fileRaw);
+				loadstring(fileRaw);
 			end
 		end
 	end
