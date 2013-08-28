@@ -149,14 +149,10 @@ end
 	local loadDirectory = function(directory)
 		foreach index, fileInfo in pairs(directory) do
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
+				print(fileInfo.name);
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
-				local success, error = pcall((function() loadString(fileRaw); end));
-				if (not success) then
-					print("There was an error loading a library: " .. fileInfo.name);
-					print(err);
-					print();
-				end
+				loadString(fileRaw);
 			end
 		end
 	end
