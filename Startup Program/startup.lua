@@ -40,7 +40,7 @@ if (json == nil) then
 			while index < string.len(s) do
 				local position = string.find(s, "\\*\"", index);
 				local text = string.match(s, "\\*\"", index);
-				if (position < 1) then error("Invalid JSON format"); end
+				if (position == nil) then error("Invalid JSON format"); end
 				if ((string.len(text) % 2) == 1) then
 					index = position + string.len(text) - 1;
 					break;
@@ -142,15 +142,15 @@ end
 
 	local label = os.getComputerLabel();
 	local rootUrl = "https://api.github.com/repos/" .. configuration.Username .. "/" .. configuration.Repository .. "/contents/";
-	local rootDir = json.parse(http.get(rootUrl));
+	local rootDir = json.parse(http.get(rootUrl).readAll());
 	local labelUrl = rootUrl .. label .. "/";
-	local labelDir = json.parse(http.get(labelUrl));
+	local labelDir = json.parse(http.get(labelUrl).readAll());
 	
 	local loadDirectory = function(directory)
 		foreach index, fileInfo in pairs(directory) do
-			if (value.type == "file") then
+			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				local fileUrl = getRaw(fileInfo);
-				local fileRaw = http.get(fileUrl);
+				local fileRaw = http.get(fileUrl).readAll();
 				local success, error = pcall((function() loadString(fileRaw); end));
 				if (not success) then
 					print("There was an error loading a library: " .. fileInfo.name);
