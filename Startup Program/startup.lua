@@ -151,9 +151,8 @@ end
 			if (value.type == "file") then
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl);
-				try
-					loadString(fileRaw);
-				catch err do
+				local success, error = pcall((function() loadString(fileRaw); end));
+				if (not success) then
 					print("There was an error loading a library: " .. fileInfo.name);
 					print(err);
 					print();
