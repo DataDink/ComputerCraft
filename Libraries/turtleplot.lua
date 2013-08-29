@@ -119,7 +119,7 @@ if (turtleplot == nil) then
 		turtleplot.excavateRight = function() return position.move(90, "excavate"); end
 		turtleplot.excavateBackward = function() return position.move(180, "excavate"); end
 		
-		position.moveTo = function(direction, x, y, z, mode)
+		position.moveTo = function(x, y, z, mode)
 			while (x > position.x) do
 				position.move(0, mode);
 			end
