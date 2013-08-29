@@ -144,7 +144,7 @@ end
 	local rootDir = json.parse(http.get(rootUrl).readAll());
 	
 	local loadDirectory = function(directory)
-		if (not fs.exists("file_cache")) then fs.mkdir("file_cache"); end
+		if (not fs.exists("file_cache")) then fs.makeDir("file_cache"); end
 		for index, fileInfo in pairs(directory) do
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				local fileUrl = getRaw(fileInfo);
