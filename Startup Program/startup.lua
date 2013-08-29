@@ -149,7 +149,7 @@ end
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
 				local loader = loadstring(fileRaw);
-				if (loader ~- nil) then loader();
+				if (loader ~= nil) then loader();
 				else print("Could not parse " .. fileInfo.name); end
 			end
 		end
