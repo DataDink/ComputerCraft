@@ -38,9 +38,12 @@
 --
 -- turtleplot.excavateTo(x, y, z)	Moves the turtle in a straight line to the given target coordinate digging in front, above, and below each step of the way.
 
+print("begin");
 if (turtleplot == nil) then
+print("create");
 	
 	turtleplot = {};
+print("46");
 	
 	(function() 
 		print("enter");
@@ -231,5 +234,7 @@ if (turtleplot == nil) then
 		turtleplot.excavateTo = function(x, y, z) return position.plotTo(x, y, z, "excavate"); end
 		
 	end)();
-	
+	print("237");
+
 end
+	print("240");
