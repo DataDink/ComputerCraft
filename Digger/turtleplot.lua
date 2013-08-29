@@ -6,11 +6,13 @@ if (turtleplot == nil) then
 		local position = { x = 0, y = 0, z = 0, d = 270 };
 		
 		position.save = function()
+			return;
 			local file = fs.open("turtle_data/position", "w");
 			file.write("return " .. position.x .. ", " .. position.y .. ", " .. position.z .. ", " .. position.d .. ";");
 			file.close();
 		end
 		position.load = function()
+			return;
 			if (not fs.exists("turtle_data/position")) then return; end
 			local file = fs.open("turtle_data/position", "r");
 			local raw = file.readAll();
