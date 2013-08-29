@@ -146,7 +146,9 @@ if (turtleplot == nil) then
 				y = y - position.y,
 				z = z - position.z
 			};
+			print(offset.x .. offset.y .. offset.z);
 			local distance = math.sqrt(offset.x*offset.x + offset.y*offset.y + offset.z*offset.z);
+			print(distance);
 			local plot = {{
 				x = position.x,
 				y = position.y,
