@@ -146,9 +146,7 @@ if (turtleplot == nil) then
 				y = y - position.y,
 				z = z - position.z
 			};
-			print(offset.x .. offset.y .. offset.z);
 			local distance = math.sqrt(offset.x*offset.x + offset.y*offset.y + offset.z*offset.z);
-			print(distance);
 			local plot = {{
 				x = position.x,
 				y = position.y,
@@ -156,10 +154,11 @@ if (turtleplot == nil) then
 			}};
 			local index = 1;
 			for d = 0, distance do
+				local multiplier = 1 / distance * d;
 				local target = {
-					x = position.x + offset.x * d,
-					y = position.y + offset.y * d,
-					z = position.z + offset.z * d
+					x = position.x + offset.x * multiplier,
+					y = position.y + offset.y * multiplier,
+					z = position.z + offset.z * multiplier
 				};
 				if not (plot[index].x == target.x and plot[index].y == target.y and plot[index].z == target.z) then
 					index = index + 1;
