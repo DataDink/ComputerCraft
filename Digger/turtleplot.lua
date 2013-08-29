@@ -2,24 +2,7 @@ if (turtleplot == nil) then
 	turtleplot = {};
 	
 	(function() 
-		if (not fs.exists("turtle_data")) then fs.makeDir("turtle_data"); end
 		local position = { x = 0, y = 0, z = 0, d = 270 };
-		
-		position.save = function()
-			if (true) then return; end
-			local file = fs.open("turtle_data/position", "w");
-			file.write("return " .. position.x .. ", " .. position.y .. ", " .. position.z .. ", " .. position.d .. ";");
-			file.close();
-		end
-		position.load = function()
-			if (true) then return; end
-			if (not fs.exists("turtle_data/position")) then return; end
-			local file = fs.open("turtle_data/position", "r");
-			local raw = file.readAll();
-			file.close();
-			position.x, position.y, position.z, position.d = loadstring(raw)();
-		end
-		position.load();
 		
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
@@ -29,7 +12,6 @@ if (turtleplot == nil) then
 			if (leftangle == direction) then
 				if (turtle.turnLeft()) then
 					position.d = direction;
-					position.save();
 					return true;
 				end
 				return false;
@@ -38,7 +20,6 @@ if (turtleplot == nil) then
 			while (position.d ~= direction) do
 				if (not turtle.turnRight()) then return false; end
 				position.d = (position.d + 90) % 360;
-				position.save();
 			end
 			return true;
 		end
@@ -95,7 +76,6 @@ if (turtleplot == nil) then
 				else
 					error("invalid movement direction");
 				end
-				position.save();
 				return true;
 			end	
 			return false;
