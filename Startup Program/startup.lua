@@ -144,11 +144,16 @@ end
 	local rootDir = json.parse(http.get(rootUrl).readAll());
 	
 	local loadDirectory = function(directory)
+		if (not fs.exists("file_cache")) then fs.mkdir("file_cache"); end
 		for index, fileInfo in pairs(directory) do
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
-				print(fileRaw);
+				local cachePath = "file_cache/" .. fileInfo.name;
+				fs.delete(cachePath);
+				local cache = fs.open(cachePath, "w");
+				cache.write(fileRaw);
+				cache.close();
 				local loader = loadstring(fileRaw);
 				if (loader ~= nil) then loader();
 				else print("Could not parse " .. fileInfo.name); end
