@@ -38,26 +38,20 @@
 --
 -- turtleplot.excavateTo(x, y, z)	Moves the turtle in a straight line to the given target coordinate digging in front, above, and below each step of the way.
 
-print("begin");
 if (turtleplot == nil) then
-print("create");
 	
 	turtleplot = {};
-print("46");
 	
 	(function() 
-		print("enter");
 		if (not fs.exists("turtle_data")) then fs.makeDir("turtle_data"); end
 		local position = { x = 0, y = 0, z = 0, d = 0 };
 		
 		position.save = function()
-			print("save");
 			local file = fs.open("turtle_data/position", "w");
 			file.write("return " .. position.x .. ", " .. position.y .. ", " .. position.z .. ", " .. position.d .. ";");
 			file.close();
 		end
 		position.load = function()
-			print("load");
 			if (not fs.exists("turtle_data/position")) then return; end
 			local file = fs.open("turtle_data/position", "r");
 			local raw = file.readAll();
@@ -69,7 +63,6 @@ print("46");
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
 		position.face = function(direction)
-			print("face");
 			if (direction == position.d) then return; end
 			local leftangle = (position.d + 270) % 360;
 			if (leftangle == direction) then
@@ -94,7 +87,6 @@ print("46");
 		turtleplot.faceBackward = function() return position.face(180); end
 		
 		position.move = function(direction, mode)
-			print("move");
 			sleep(0.01);
 			local move = turtle.forward;
 			local dig = turtle.dig;
@@ -169,7 +161,6 @@ print("46");
 		turtleplot.excavateBackward = function() return position.move(180, "excavate"); end
 		
 		position.moveTo = function(direction, x, y, z, mode)
-			print("moveTo");
 			while (x > position.x) do
 				position.move(0, mode);
 			end
@@ -191,7 +182,6 @@ print("46");
 		end
 		
 		position.getPlot = function(x, y, z)
-			print("getPlot");
 			local offset = {
 				x = x - position.x,
 				y = y - position.y,
@@ -221,11 +211,10 @@ print("46");
 		turtleplot.calcPlotTo = function(x, y, z) return position.getPlot(x, y, z); end
 		
 		position.plotTo = function(x, y, z, mode, action)
-			print("plotTo");
 			local plot = position.getPlot(x, y, z);
 			for i, coords in ipairs(plot) do
 				position.moveTo(coords.x, coords.y, coords.z, mode);
-				if (action != nil) then action(); end
+				if (action ~= nil) then action(); end
 			end
 		end
 		
@@ -234,7 +223,4 @@ print("46");
 		turtleplot.excavateTo = function(x, y, z) return position.plotTo(x, y, z, "excavate"); end
 		
 	end)();
-	print("237");
-
 end
-	print("240");
