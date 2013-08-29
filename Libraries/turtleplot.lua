@@ -43,15 +43,18 @@ if (turtleplot == nil) then
 	turtleplot = {};
 	
 	(function() 
+		print("enter");
 		if (not fs.exists("turtle_data")) then fs.makeDir("turtle_data"); end
 		local position = { x = 0, y = 0, z = 0, d = 0 };
 		
 		position.save = function()
+			print("save");
 			local file = fs.open("turtle_data/position", "w");
 			file.write("return " .. position.x .. ", " .. position.y .. ", " .. position.z .. ", " .. position.d .. ";");
 			file.close();
 		end
 		position.load = function()
+			print("load");
 			if (not fs.exists("turtle_data/position")) then return; end
 			local file = fs.open("turtle_data/position", "r");
 			local raw = file.readAll();
@@ -63,6 +66,7 @@ if (turtleplot == nil) then
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
 		position.face = function(direction)
+			print("face");
 			if (direction == position.d) then return; end
 			local leftangle = (position.d + 270) % 360;
 			if (leftangle == direction) then
@@ -87,6 +91,7 @@ if (turtleplot == nil) then
 		turtleplot.faceBackward = function() return position.face(180); end
 		
 		position.move = function(direction, mode)
+			print("move");
 			sleep(0.01);
 			local move = turtle.forward;
 			local dig = turtle.dig;
@@ -161,6 +166,7 @@ if (turtleplot == nil) then
 		turtleplot.excavateBackward = function() return position.move(180, "excavate"); end
 		
 		position.moveTo = function(direction, x, y, z, mode)
+			print("moveTo");
 			while (x > position.x) do
 				position.move(0, mode);
 			end
@@ -182,6 +188,7 @@ if (turtleplot == nil) then
 		end
 		
 		position.getPlot = function(x, y, z)
+			print("getPlot");
 			local offset = {
 				x = x - position.x,
 				y = y - position.y,
@@ -211,6 +218,7 @@ if (turtleplot == nil) then
 		turtleplot.calcPlotTo = function(x, y, z) return position.getPlot(x, y, z); end
 		
 		position.plotTo = function(x, y, z, mode, action)
+			print("plotTo");
 			local plot = position.getPlot(x, y, z);
 			for i, coords in ipairs(plot) do
 				position.moveTo(coords.x, coords.y, coords.z, mode);
