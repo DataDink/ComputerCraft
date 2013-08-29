@@ -2,33 +2,16 @@ if (turtleplot == nil) then
 	turtleplot = {};
 	
 	(function() 
-		if (not fs.exists("turtle_data")) then fs.makeDir("turtle_data"); end
-		local position = { x = 0, y = 0, z = 0, d = 0 };
-		
-		position.save = function()
-			local file = fs.open("turtle_data/position", "w");
-			file.write("return " .. position.x .. ", " .. position.y .. ", " .. position.z .. ", " .. position.d .. ";");
-			file.close();
-		end
-		position.load = function()
-			if (not fs.exists("turtle_data/position")) then return; end
-			local file = fs.open("turtle_data/position", "r");
-			local raw = file.readAll();
-			file.close();
-			position.x, position.y, position.z, position.d = loadstring(raw)();
-		end
-		position.load();
+		local position = { x = 0, y = 0, z = 0, d = 270 };
 		
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
 		position.face = function(direction)
-			if (direction == position.d) then return; end
+			if (direction == position.d) then return true; end
 			local leftangle = (position.d + 270) % 360;
 			if (leftangle == direction) then
 				if (turtle.turnLeft()) then
 					position.d = direction;
-					position.save();
-					print(position.d);
 					return true;
 				end
 				return false;
@@ -37,16 +20,14 @@ if (turtleplot == nil) then
 			while (position.d ~= direction) do
 				if (not turtle.turnRight()) then return false; end
 				position.d = (position.d + 90) % 360;
-				position.save();
-				print(position.d);
 			end
 			return true;
 		end
 		
 		turtleplot.faceForward = function() return position.face(270); end
-		turtleplot.faceLeft = function() return position.face(0); end
-		turtleplot.faceRight = function() return position.face(90); end
-		turtleplot.faceBackward = function() return position.face(180); end
+		turtleplot.faceLeft = function() return position.face(180); end
+		turtleplot.faceRight = function() return position.face(0); end
+		turtleplot.faceBackward = function() return position.face(90); end
 		
 		position.move = function(direction, mode)
 			sleep(0.01);
@@ -95,7 +76,6 @@ if (turtleplot == nil) then
 				else
 					error("invalid movement direction");
 				end
-				position.save();
 				return true;
 			end	
 			return false;
@@ -104,23 +84,23 @@ if (turtleplot == nil) then
 		turtleplot.moveUp = function() return position.move("up"); end
 		turtleplot.moveDown = function() return position.move("down"); end
 		turtleplot.moveForward = function() return position.move(270); end
-		turtleplot.moveLeft = function() return position.move(0); end
-		turtleplot.moveRight = function() return position.move(90); end
-		turtleplot.moveBackward = function() return position.move(180); end
+		turtleplot.moveLeft = function() return position.move(180); end
+		turtleplot.moveRight = function() return position.move(0); end
+		turtleplot.moveBackward = function() return position.move(90); end
 		
 		turtleplot.digUp = function() return position.move("up", "dig"); end
 		turtleplot.digDown = function() return position.move("down", "dig"); end
 		turtleplot.digForward = function() return position.move(270, "dig"); end
-		turtleplot.digLeft = function() return position.move(0, "dig"); end
-		turtleplot.digRight = function() return position.move(90, "dig"); end
-		turtleplot.digBackward = function() return position.move(180, "dig"); end
+		turtleplot.digLeft = function() return position.move(180, "dig"); end
+		turtleplot.digRight = function() return position.move(0, "dig"); end
+		turtleplot.digBackward = function() return position.move(90, "dig"); end
 		
 		turtleplot.excavateUp = function() return position.move("up", "excavate"); end
 		turtleplot.excavateDown = function() return position.move("down", "excavate"); end
 		turtleplot.excavateForward = function() return position.move(270, "excavate"); end
-		turtleplot.excavateLeft = function() return position.move(0, "excavate"); end
-		turtleplot.excavateRight = function() return position.move(90, "excavate"); end
-		turtleplot.excavateBackward = function() return position.move(180, "excavate"); end
+		turtleplot.excavateLeft = function() return position.move(180, "excavate"); end
+		turtleplot.excavateRight = function() return position.move(0, "excavate"); end
+		turtleplot.excavateBackward = function() return position.move(90, "excavate"); end
 		
 		position.moveTo = function(x, y, z, mode)
 			while (x > position.x) do
@@ -143,6 +123,14 @@ if (turtleplot == nil) then
 			end
 		end
 		
+		local function round(number)
+			if (number % 1 >= 0.5) then
+				return math.ceil(number);
+			else
+				return math.floor(number);
+			end
+		end
+		
 		position.getPlot = function(x, y, z)
 			local offset = {
 				x = x - position.x,
@@ -159,9 +147,9 @@ if (turtleplot == nil) then
 			for d = 0, distance do
 				local multiplier = 1 / distance * d;
 				local target = {
-					x = position.x + offset.x * multiplier,
-					y = position.y + offset.y * multiplier,
-					z = position.z + offset.z * multiplier
+					x = round(position.x + offset.x * multiplier),
+					y = round(position.y + offset.y * multiplier),
+					z = round(position.z + offset.z * multiplier)
 				};
 				if not (plot[index].x == target.x and plot[index].y == target.y and plot[index].z == target.z) then
 					index = index + 1;
