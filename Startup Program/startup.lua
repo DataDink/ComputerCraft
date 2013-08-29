@@ -148,7 +148,7 @@ end
 			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
 				local fileUrl = getRaw(fileInfo);
 				local fileRaw = http.get(fileUrl).readAll();
-				print(loader);
+				print(fileRaw);
 				local loader = loadstring(fileRaw);
 				if (loader ~= nil) then loader();
 				else print("Could not parse " .. fileInfo.name); end
