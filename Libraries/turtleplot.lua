@@ -29,7 +29,14 @@
 -- turtleplot.excavateLeft()
 -- turtleplot.excavateRight()
 -- turtleplot.excavateBackward()	Face the turtle, digs the block in front, above, and below it, and moves one space in the specified direction. Will attempt to burn fuel from slot 1 when needed and will wait if no fuel is available.
-
+--
+-- turtleplot.calcPlotTo(x, y, z)	Calculates a series of x,y,z coordinates in a straight line from the turtle's current position to the given target coordinate
+--
+-- turtleplot.moveTo(x, y, z[, action]) Moves the turtle in a straight line to the given target coordinates optinally performing an action each step of the way
+--
+-- turtleplot.digTo(x, y, z)		Moves the turtle in a straight line to the given target coordinate digging out blocks that may be in the way.
+--
+-- turtleplot.excavateTo(x, y, z)	Moves the turtle in a straight line to the given target coordinate digging in front, above, and below each step of the way.
 
 if (turtleplot == nil) then
 	
@@ -80,6 +87,7 @@ if (turtleplot == nil) then
 		turtleplot.faceBackward = function() return position.face(180); end
 		
 		position.move = function(direction, mode)
+			sleep(0.01);
 			local move = turtle.forward;
 			local dig = turtle.dig;
 			
@@ -173,11 +181,46 @@ if (turtleplot == nil) then
 			end
 		end
 		
-		position.plotTo = function(x, y, z)
-		
+		position.getPlot = function(x, y, z)
+			local offset = {
+				x = x - position.x,
+				y = y - position.y,
+				z = z - position.z
+			};
+			local distance = math.sqrt(offset.x*offset.x + offset.y*offset.y + offset.z*offset.z);
+			local plot = {{
+				x = position.x,
+				y = position.y,
+				z = position.z
+			}};
+			local index = 1;
+			for d = 0, distance do
+				local target = {
+					x = position.x + offset.x * d,
+					y = position.y + offset.y * d,
+					z = position.z + offset.z * d
+				};
+				if not (plot[index].x == target.x and plot[index].y == target.y and plot[index].z == target.z) then
+					index = index + 1;
+					plot[index] = target;
+				end
+			end
+			return plot;
 		end
 		
-		turtleplot.moveTo = function(x, y, z) return position.plotTo(x, y, z); end
+		turtleplot.calcPlotTo = function(x, y, z) return position.getPlot(x, y, z); end
+		
+		position.plotTo = function(x, y, z, mode, action)
+			local plot = position.getPlot(x, y, z);
+			for i, coords in ipairs(plot) do
+				position.moveTo(coords.x, coords.y, coords.z, mode);
+				if (action != nil) then action(); end
+			end
+		end
+		
+		turtleplot.moveTo = function(x, y, z, action) return position.plotTo(x, y, z, nil, action); end
+		turtleplot.digTo = function(x, y, z) return position.plotTo(x, y, z, "dig"); end
+		turtleplot.excavateTo = function(x, y, z) return position.plotTo(x, y, z, "excavate"); end
 		
 	end)();
 	
