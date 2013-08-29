@@ -46,9 +46,9 @@ if (turtleplot == nil) then
 		end
 		
 		turtleplot.faceForward = function() return position.face(270); end
-		turtleplot.faceLeft = function() return position.face(0); end
-		turtleplot.faceRight = function() return position.face(90); end
-		turtleplot.faceBackward = function() return position.face(180); end
+		turtleplot.faceLeft = function() return position.face(180); end
+		turtleplot.faceRight = function() return position.face(0); end
+		turtleplot.faceBackward = function() return position.face(90); end
 		
 		position.move = function(direction, mode)
 			sleep(0.01);
@@ -106,23 +106,23 @@ if (turtleplot == nil) then
 		turtleplot.moveUp = function() return position.move("up"); end
 		turtleplot.moveDown = function() return position.move("down"); end
 		turtleplot.moveForward = function() return position.move(270); end
-		turtleplot.moveLeft = function() return position.move(0); end
-		turtleplot.moveRight = function() return position.move(90); end
-		turtleplot.moveBackward = function() return position.move(180); end
+		turtleplot.moveLeft = function() return position.move(180); end
+		turtleplot.moveRight = function() return position.move(0); end
+		turtleplot.moveBackward = function() return position.move(90); end
 		
 		turtleplot.digUp = function() return position.move("up", "dig"); end
 		turtleplot.digDown = function() return position.move("down", "dig"); end
 		turtleplot.digForward = function() return position.move(270, "dig"); end
-		turtleplot.digLeft = function() return position.move(0, "dig"); end
-		turtleplot.digRight = function() return position.move(90, "dig"); end
-		turtleplot.digBackward = function() return position.move(180, "dig"); end
+		turtleplot.digLeft = function() return position.move(180, "dig"); end
+		turtleplot.digRight = function() return position.move(0, "dig"); end
+		turtleplot.digBackward = function() return position.move(90, "dig"); end
 		
 		turtleplot.excavateUp = function() return position.move("up", "excavate"); end
 		turtleplot.excavateDown = function() return position.move("down", "excavate"); end
 		turtleplot.excavateForward = function() return position.move(270, "excavate"); end
-		turtleplot.excavateLeft = function() return position.move(0, "excavate"); end
-		turtleplot.excavateRight = function() return position.move(90, "excavate"); end
-		turtleplot.excavateBackward = function() return position.move(180, "excavate"); end
+		turtleplot.excavateLeft = function() return position.move(180, "excavate"); end
+		turtleplot.excavateRight = function() return position.move(0, "excavate"); end
+		turtleplot.excavateBackward = function() return position.move(90, "excavate"); end
 		
 		position.moveTo = function(x, y, z, mode)
 			while (x > position.x) do
