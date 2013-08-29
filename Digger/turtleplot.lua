@@ -24,7 +24,7 @@ if (turtleplot == nil) then
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
 		position.face = function(direction)
-			if (direction == position.d) then return; end
+			if (direction == position.d) then return true; end
 			local leftangle = (position.d + 270) % 360;
 			if (leftangle == direction) then
 				if (turtle.turnLeft()) then
