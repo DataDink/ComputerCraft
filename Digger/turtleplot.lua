@@ -143,6 +143,14 @@ if (turtleplot == nil) then
 			end
 		end
 		
+		local function round(number)
+			if (number % 1 >= 0.5) then
+				return math.ceil(number);
+			else
+				return math.floor(number);
+			end
+		end
+		
 		position.getPlot = function(x, y, z)
 			local offset = {
 				x = x - position.x,
@@ -159,9 +167,9 @@ if (turtleplot == nil) then
 			for d = 0, distance do
 				local multiplier = 1 / distance * d;
 				local target = {
-					x = position.x + offset.x * multiplier,
-					y = position.y + offset.y * multiplier,
-					z = position.z + offset.z * multiplier
+					x = round(position.x + offset.x * multiplier),
+					y = round(position.y + offset.y * multiplier),
+					z = round(position.z + offset.z * multiplier)
 				};
 				if not (plot[index].x == target.x and plot[index].y == target.y and plot[index].z == target.z) then
 					index = index + 1;
