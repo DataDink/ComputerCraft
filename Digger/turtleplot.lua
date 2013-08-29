@@ -63,9 +63,6 @@ if (turtleplot == nil) then
 				if (not position.face(direction)) then return false; end
 			end
 			
-			print(move);
-			print(dig);
-			
 			if (turtle.getFuelLevel() == 0) then
 				turtle.select(1);
 				if (not turtle.refuel(1)) then
