@@ -1,5 +1,4 @@
 if (turtleplot == nil) then
-	
 	turtleplot = {};
 	
 	(function() 
