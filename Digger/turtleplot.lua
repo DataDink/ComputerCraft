@@ -3,7 +3,7 @@ if (turtleplot == nil) then
 	
 	(function() 
 		if (not fs.exists("turtle_data")) then fs.makeDir("turtle_data"); end
-		local position = { x = 0, y = 0, z = 0, d = 0 };
+		local position = { x = 0, y = 0, z = 0, d = 270 };
 		
 		position.save = function()
 			local file = fs.open("turtle_data/position", "w");
@@ -28,6 +28,7 @@ if (turtleplot == nil) then
 				if (turtle.turnLeft()) then
 					position.d = direction;
 					position.save();
+					print(position.d);
 					return true;
 				end
 				return false;
@@ -37,7 +38,9 @@ if (turtleplot == nil) then
 				if (not turtle.turnRight()) then return false; end
 				position.d = (position.d + 90) % 360;
 				position.save();
+				print(position.d);
 			end
+			return true;
 		end
 		
 		turtleplot.faceForward = function() return position.face(270); end
