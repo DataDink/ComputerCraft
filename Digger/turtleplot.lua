@@ -30,7 +30,6 @@ if (turtleplot == nil) then
 				if (turtle.turnLeft()) then
 					position.d = direction;
 					position.save();
-					print(position.d);
 					return true;
 				end
 				return false;
@@ -40,7 +39,6 @@ if (turtleplot == nil) then
 				if (not turtle.turnRight()) then return false; end
 				position.d = (position.d + 90) % 360;
 				position.save();
-				print(position.d);
 			end
 			return true;
 		end
@@ -64,6 +62,9 @@ if (turtleplot == nil) then
 			else
 				if (not position.face(direction)) then return false; end
 			end
+			
+			print(move);
+			print(dig);
 			
 			if (turtle.getFuelLevel() == 0) then
 				turtle.select(1);
