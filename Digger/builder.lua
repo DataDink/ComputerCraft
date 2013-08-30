@@ -36,8 +36,8 @@ if (builder == nil) then
 	
 	local extractClosestVector = function(from, vectors)
 		local result = nil;
+		print(vectors);
 		for i, v in pairs(vectors) do
-			print(i .. " " .. v);
 			local dist = measure(v.x - from.x, v.y - from.y, v.z - from.z);
 			if (dist == 0) then
 				table.remove(vectors, i);
