@@ -239,7 +239,7 @@ if (turtleplot == nil) then
 		end
 
 		position.calcAngle3d = function(frontAngle, sideAngle, distance)
-			if (distance == 0) then return {h = 0, v = 0, d = 0};
+			if (distance == 0) then return {h = 0, v = 0, d = 0}; end
 			local front = position.calcAngle2d(frontAngle, 1);
 			if (front.h == 0 and front.v == 0 and sideAngle == 0) then
 				return { h = 0, v = 0, d = distance };
