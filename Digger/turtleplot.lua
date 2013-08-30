@@ -101,28 +101,7 @@ if (turtleplot == nil) then
 		turtleplot.excavateLeft = function() return position.move(180, "excavate"); end
 		turtleplot.excavateRight = function() return position.move(0, "excavate"); end
 		turtleplot.excavateBackward = function() return position.move(90, "excavate"); end
-		
-		position.moveTo = function(x, y, z, mode)
-			while (x > position.x) do
-				position.move(0, mode);
-			end
-			while (x < position.x) do
-				position.move(180, mode);
-			end
-			while (y > position.y) do
-				position.move(270, mode);
-			end
-			while (y < position.y) do
-				position.move(90, mode);
-			end
-			while (z > position.z) do
-				position.move("up", mode);
-			end
-			while (z < position.z) do
-				position.move("down", mode);
-			end
-		end
-		
+
 		local function round(number)
 			if (number % 1 >= 0.5) then
 				return math.ceil(number);
@@ -131,6 +110,27 @@ if (turtleplot == nil) then
 			end
 		end
 		
+		position.moveTo = function(x, y, z, mode)
+			while (round(x) > position.x) do
+				position.move(0, mode);
+			end
+			while (round(x) < position.x) do
+				position.move(180, mode);
+			end
+			while (round(y) > position.y) do
+				position.move(270, mode);
+			end
+			while (round(y) < position.y) do
+				position.move(90, mode);
+			end
+			while (round(z) > position.z) do
+				position.move("up", mode);
+			end
+			while (round(z) < position.z) do
+				position.move("down", mode);
+			end
+		end
+				
 		position.getPlot = function(x, y, z)
 			local offset = {
 				x = x - position.x,
@@ -182,7 +182,7 @@ if (turtleplot == nil) then
 		position.calcAngle2d = function(angle, distance)
 			return {
 				h = math.cos(math.rad(angle)) * distance,
-				v = math.cos(math.rad(angle)) * distance
+				v = math.sin(math.rad(angle)) * distance
 			};
 		end
 		
