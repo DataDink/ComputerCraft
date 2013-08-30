@@ -1,6 +1,12 @@
 if (builder == nil) then
 	builder = {};
 	
+	local count = function(t)
+		local c = 0;
+		for i, v in pairs(t) do c = c + 1; end
+		return c;
+	end
+	
 	local function round(number)
 		if (number % 1 >= 0.5) then
 			return math.ceil(number);
@@ -21,12 +27,20 @@ if (builder == nil) then
 		return math.sqrt(h*h + v*v + d*d);
 	end
 	
+	local insertVector = function(collection, vector)
+		for i, v in pairs(collection) do
+			if (v.x == vector.x and v.y == vector.y and v.z == vector.z) then return; end
+		end
+		table.insert(collection, vector);
+	end
+	
 	local extractClosestVector = function(from, vectors)
-		if (vectors == nil or vectors[1] == nil) then return nil; end
 		local result = nil;
 		for i, v in pairs(vectors) do
 			local dist = measure(v.x - from.x, v.y - from.y, v.z - from.z);
-			if (result == nil or dist < result.distance) then
+			if (dist == 0) then
+				table.remove(vectors, i);
+			elseif (result == nil or dist < result.distance) then
 				result = {
 					index = i,
 					vector = v,
@@ -34,6 +48,7 @@ if (builder == nil) then
 				};
 			end
 		end
+		if (result == nil) then return nil; end
 		return table.remove(vectors, result.index);
 	end
 	
@@ -55,6 +70,7 @@ if (builder == nil) then
 				table.insert(results, v);
 			end
 		end
+		return results;
 	end
 	
 	local groupBy = function(objects, indexer)
@@ -76,17 +92,16 @@ if (builder == nil) then
 		return result;
 	end
 	
-	local sortVector = function(vectors)
+	local sortVectors = function(vectors)
 		local result = {};
 		local refPoint = {};
-		local lastPlot = {0, 0, 0};
+		local lastPlot = {x = 0, y = 0, z = 0};
 		local layers = groupBy(vectors, function(v) return v.z; end);
+		
 		for i, layer in pairs(layers) do
 			layer = sortBy(layer, function(v) return v.y; end);
 			while (lastPlot ~= nil) do
 				lastPlot = extractClosestVector(lastPlot, layer);
-				print(lastPlot);
-				print(table.getn(layer));
 				if (lastPlot ~= nil) then table.insert(result, lastPlot); end
 			end
 		end
@@ -132,7 +147,7 @@ if (builder == nil) then
 			
 			table.insert(plots, zplot);
 		end
-		local sorted = sortVector(plots);
+		local sorted = sortVectors(plots);
 		return sorted;
 	end
 	
@@ -144,18 +159,21 @@ if (builder == nil) then
 		if (startH == nil) then startH = 0; end
 		if (endH == nil) then endH = 360; end
 		
-		for x = startV, endV do
+		for x = startV, endV, step do
 			local xplot = plot(x, radius);
-			for z = startH, endH do
+			for z = startH, endH, step do
 				local zplot = plot(z, xplot.h);
-				table.insert(plots, {
+				insertVector(plots, {
 					x = round(zplot.h),
 					y = round(zplot.v),
 					z = round(xplot.v)
 				});
 			end
 		end
-		local sorted = sortVector(plots);
+		
+		local sorted = sortVectors(plots);
 		return sorted;
 	end
+
 end
+
