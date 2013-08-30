@@ -266,7 +266,7 @@ if (turtleplot == nil) then
 			return {x = position.x + target.h, y = position.y + target.d, z = position.z + target.v};
 		end
 		turtleplot.calcAngleZY = function(angleZ, angleY, distance)
-			local target = position.calcAngle3d((angleZ + 270) % 360), angleY, distance);
+			local target = position.calcAngle3d((angleZ + 270) % 360, angleY, distance);
 			return {x = position.x + target.v, y = position.y + target.h, z = position.z + target.d};
 		end
 		turtleplot.calcAngleXY = function(angleX, angleY, distance)
@@ -279,7 +279,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x + target.h, position.y + target.v, position.z + target.d, nil, action);
 		end
 		turtleplot.moveAngleZY = function(angleZ, angleY, distance, action)
-			local target = position.calcAngle3d((angleZ + 270) % 360), angleY, distance);
+			local target = position.calcAngle3d((angleZ + 270) % 360, angleY, distance);
 			position.plotTo(position.x + target.v, position.y + target.h, position.z + target.d, nil, action);
 		end
 		turtleplot.moveAngleXY = function(angleX, angleY, distance, action)
@@ -292,7 +292,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x + target.h, position.y + target.v, position.z + target.d, "dig");
 		end
 		turtleplot.digAngleZY = function(angleZ, angleY, distance)
-			local target = position.calcAngle3d((angleZ + 270) % 360), angleY, distance);
+			local target = position.calcAngle3d((angleZ + 270) % 360, angleY, distance);
 			position.plotTo(position.x + target.v, position.y + target.h, position.z + target.d, "dig");
 		end
 		turtleplot.digAngleXY = function(angleX, angleY, distance)
@@ -305,7 +305,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x + target.h, position.y + target.v, position.z + target.d, "excavate");
 		end
 		turtleplot.excavateAngleZY = function(angleZ, angleY, distance)
-			local target = position.calcAngle3d((angleZ + 270) % 360), angleY, distance);
+			local target = position.calcAngle3d((angleZ + 270) % 360, angleY, distance);
 			position.plotTo(position.x + target.v, position.y + target.h, position.z + target.d, "excavate");
 		end
 		turtleplot.excavateAngleXY = function(angleX, angleY, distance)
