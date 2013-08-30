@@ -109,11 +109,11 @@ if (builder == nil) then
 		for x = startV, endV do
 			local xplot = plot(x, radius);
 			for z = startH, endH do
-				local zplot = plot(z, xplot.v);
+				local zplot = plot(z, xplot.h);
 				table.insert(plots, {
-					x = zplot.h,
-					y = zplot.v,
-					z = xplot.v
+					x = round(zplot.h),
+					y = round(zplot.v),
+					z = round(xplot.v)
 				});
 			end
 		end
