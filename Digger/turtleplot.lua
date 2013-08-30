@@ -175,7 +175,7 @@ if (turtleplot == nil) then
 		
 		position.calcDistance = function(vector)
 			local a = 0;
-			for i, v in pairs(vector) do a = a + v * v; end
+			--for i, v in pairs(vector) do a = a + v * v; end
 			return math.sqrt(a);
 		end
 		
