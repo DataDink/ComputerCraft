@@ -173,15 +173,12 @@ if (turtleplot == nil) then
 		turtleplot.digTo = function(x, y, z) return position.plotTo(x, y, z, "dig"); end
 		turtleplot.excavateTo = function(x, y, z) return position.plotTo(x, y, z, "excavate"); end
 		
-		print("176");
-		
 		position.calcDistance = function(vector)
 			local a = 0;
 			for i, v in pairs(vector) do a = a + v * v; end
 			return math.sqrt(a);
 		end
 		
-		print("184")
 		position.calcAngle2d = function(angle, distance)
 			return {
 				h = math.cos(math.rad(angle)) * distance,
@@ -189,7 +186,6 @@ if (turtleplot == nil) then
 			};
 		end
 		
-		print("192");
 		turtpeplot.calcAngleZ = function(angle, distance) 
 			local target = position.calcAngle2d(angle, distance);
 			return {x = position.x + target.h, y = position.y + target.v, z = position.z};
@@ -203,6 +199,7 @@ if (turtleplot == nil) then
 			return {x = position.x, y = position.y + target.v, z = position.z + target.h};
 		end
 		
+		print("202");
 		turtleplot.moveAngleZ = function(angle, distance, action)
 			local target = position.calcAngle2d(angle, distance);
 			position.plotTo(position.x + target.h, position.y + target.v, position.z, nil, action);
@@ -216,6 +213,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x, position.y + target.v, position.z + target.h, nil, action);
 		end
 		
+		print("216");
 		turtleplot.digAngleZ = function(angle, distance)
 			local target = position.calcAngle2d(angle, distance);
 			position.plotTo(position.x + target.h, position.y + target.v, position.z, "dig");
@@ -229,6 +227,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x, position.y + target.v, position.z + target.h, "dig");
 		end
 		
+		print("230");
 		turtleplot.excavateAngleZ = function(angle, distance)
 			local target = position.calcAngle2d(angle, distance);
 			position.plotTo(position.x + target.h, position.y + target.v, position.z, "excavate");
@@ -242,6 +241,7 @@ if (turtleplot == nil) then
 			position.plotTo(position.x, position.y + target.v, position.z + target.h, "excavate");
 		end
 
+		print("244");
 		position.calcAngle3d = function(frontAngle, sideAngle, distance)
 			if (distance == 0) then return {h = 0, v = 0, d = 0}; end
 			local front = position.calcAngle2d(frontAngle, 1);
@@ -265,6 +265,7 @@ if (turtleplot == nil) then
 			}
 		end
 		
+		print("268");
 		turtleplot.calcAngleZX = function(angleZ, angleX, distance)
 			local target = position.calcAngle3d(angleZ, (angleX + 270) % 360, distance);
 			return {x = position.x + target.h, y = position.y + target.d, z = position.z + target.v};
