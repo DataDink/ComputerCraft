@@ -104,7 +104,7 @@ if (builder == nil) then
 		if (startV == nil) then startV = 0; end
 		if (endV == nil) then endV = 360; end
 		if (startH == nil) then startH = 0; end
-		if (endH = nil) then endH = 360; end
+		if (endH == nil) then endH = 360; end
 		
 		for x = startV, endV do
 			local xplot = plot(x, radius);
