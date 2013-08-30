@@ -85,6 +85,8 @@ if (builder == nil) then
 			layer = sortBy(layer, function(v) return v.y; end);
 			while (lastPlot ~= nil) do
 				lastPlot = extractClosestVector(lastPlot, layer);
+				print(lastPlot);
+				print(table.getn(layer));
 				if (lastPlot ~= nil) then table.insert(result, lastPlot); end
 			end
 		end
