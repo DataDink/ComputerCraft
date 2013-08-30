@@ -37,6 +37,26 @@ if (builder == nil) then
 		return table.remove(vectors, result.index);
 	end
 	
+	local sortBy = function(objects, indexer)
+		local results = {};
+		local indexed = {};
+		local indexes = {};
+		
+		for i, v in pairs(objects) do
+			local key = indexer(v);
+			if (indexed[key] == nil) then indexed[key] = {}; end
+			table.insert(indexed[key], v);
+			table.insert(indexes, key);
+		end
+		
+		table.sort(indexes);
+		for i, key in pairs(indexes) do
+			for i2, v in pairs(indexed[key]) do
+				table.insert(results, v);
+			end
+		end
+	end
+	
 	local groupBy = function(objects, indexer)
 		local byIndex = {};
 		for i, v in pairs(objects) do
@@ -62,6 +82,7 @@ if (builder == nil) then
 		local lastPlot = {0, 0, 0};
 		local layers = groupBy(vectors, function(v) return v.z; end);
 		for i, layer in pairs(layers) do
+			layer = sortBy(layer, function(v) return v.y; end);
 			while (lastPlot ~= nil) do
 				lastPlot = extractClosestVector(lastPlot, layer);
 				if (lastPlot ~= nil) then table.insert(result, lastPlot); end
