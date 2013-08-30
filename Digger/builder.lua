@@ -22,7 +22,7 @@ if (builder == nil) then
 	end
 	
 	local extractClosestVector(from, vectors)
-		if (vectors == nil or vectors[0] == nil) then return nil; end
+		if (vectors == nil or vectors[1] == nil) then return nil; end
 		local result = nil;
 		for i, v in pairs(vectors) do
 			local dist = measure(v.x - from.x, v.y - from.y, v.z - from.z);
