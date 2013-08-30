@@ -95,8 +95,9 @@ if (builder == nil) then
 		local refPoint = {};
 		local lastPlot = {x = 0, y = 0, z = 0};
 		local layers = groupBy(vectors, function(v) return v.z; end);
-		
+
 		for i, layer in pairs(layers) do
+
 			layer = sortBy(layer, function(v) return v.y; end);
 			while (lastPlot ~= nil) do
 				lastPlot = extractClosestVector(lastPlot, layer);
@@ -173,5 +174,9 @@ if (builder == nil) then
 		return sorted;
 	end
 
+	local plots = builder.sphere(10);
+	for i, v in pairs(plots) do
+		print(v.x .. " " .. v.y .. " " .. v.z);
+	end
 end
 
