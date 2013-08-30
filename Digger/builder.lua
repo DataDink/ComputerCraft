@@ -98,5 +98,26 @@ if (builder == nil) then
 		return sorted;
 	end
 	
-	
+	builder.sphere = function(radius, startV, endV, startH, endH)
+		local plots = {};
+		local step = 45 / radius;
+		if (startV == nil) then startV = 0; end
+		if (endV == nil) then endV = 360; end
+		if (startH == nil) then startH = 0; end
+		if (endH = nil) then endH = 360; end
+		
+		for x = startV, endV do
+			local xplot = plot(x, radius);
+			for z = startH, endH do
+				local zplot = plot(z, xplot.v);
+				table.insert(plots, {
+					x = zplot.h,
+					y = zplot.v,
+					z = xplot.v
+				});
+			end
+		end
+		local sorted = sortVector(plots);
+		return sorted;
+	end
 end
