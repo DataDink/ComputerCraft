@@ -59,15 +59,12 @@ if (builder == nil) then
 	local sortVector = function(vectors)
 		local result = {};
 		local refPoint = {};
-		local byZ = groupBy(vectors, function(v) return v.z; end);
-		for iz, zvectors in pairs(byZ) do
-			local byY = groupBy(zvectors, function(v) return v.y; end);
-			for iy, yvectors in pairs(byY) do
-				local lastVector = table.remove(yvectors, 1);
-				while (lastVector ~= nil) do
-					table.insert(result, lastVector);
-					lastVector = extractClosestVector(lastVector, yvectors);
-				end
+		local lastPlot = {0, 0, 0};
+		local layers = groupBy(vectors, function(v) return v.z; end);
+		for i, layer in pairs(layers) do
+			while (lastPlot ~= nil) do
+				lastPlot = extractClosestVector(lastPlot, layer);
+				if (lastPlot ~= nil) then table.insert(result, lastPlot); end
 			end
 		end
 		return result;
