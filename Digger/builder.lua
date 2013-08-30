@@ -21,7 +21,7 @@ if (builder == nil) then
 		return math.sqrt(h*h + v*v + d*d);
 	end
 	
-	local extractClosestVector(from, vectors)
+	local extractClosestVector = function(from, vectors)
 		if (vectors == nil or vectors[1] == nil) then return nil; end
 		local result = nil;
 		for i, v in pairs(vectors) do
