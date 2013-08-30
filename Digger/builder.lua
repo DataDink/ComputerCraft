@@ -21,7 +21,23 @@ if (builder == nil) then
 		return math.sqrt(h*h + v*v + d*d);
 	end
 	
-	local groupSort = function(objects, indexer)
+	local extractClosestVector(from, vectors)
+		if (vectors == nil or vectors[0] == nil) then return nil; end
+		local result = nil;
+		for i, v in pairs(vectors) do
+			local dist = measure(v.x - from.x, v.y - from.y, v.z - from.z);
+			if (result == nil or dist < result.distance) then
+				result = {
+					index = i,
+					vector = v,
+					distance = dist
+				};
+			end
+		end
+		return table.remove(vectors, result.index);
+	end
+	
+	local groupBy = function(objects, indexer)
 		local byIndex = {};
 		for i, v in pairs(objects) do
 			local key = indexer(v);
@@ -42,13 +58,15 @@ if (builder == nil) then
 	
 	local sortVector = function(vectors)
 		local result = {};
-		local byZ = groupSort(vectors, function(v) return v.z; end);
+		local refPoint = {};
+		local byZ = groupBy(vectors, function(v) return v.z; end);
 		for iz, zvectors in pairs(byZ) do
-			local byY = groupSort(zvectors, function(v) return v.y; end);
+			local byY = groupBy(zvectors, function(v) return v.y; end);
 			for iy, yvectors in pairs(byY) do
-				local byX = groupSort(yvectors, function(v) return v.x; end);
-				for ix, xvectors in pairs(byX) do
-					table.insert(result, xvectors[1]);
+				local lastVector = table.remove(yvectors, 1);
+				while (lastVector ~= nil) do
+					table.insert(result, lastVector);
+					lastVector = extractClosestVector(lastVector, yvectors);
 				end
 			end
 		end
