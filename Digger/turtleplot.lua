@@ -173,12 +173,15 @@ if (turtleplot == nil) then
 		turtleplot.digTo = function(x, y, z) return position.plotTo(x, y, z, "dig"); end
 		turtleplot.excavateTo = function(x, y, z) return position.plotTo(x, y, z, "excavate"); end
 		
+		print("176");
+		
 		position.calcDistance = function(vector)
 			local a = 0;
 			for i, v in pairs(vector) do a = a + v * v; end
 			return math.sqrt(a);
 		end
 		
+		print("184")
 		position.calcAngle2d = function(angle, distance)
 			return {
 				h = math.cos(math.rad(angle)) * distance,
@@ -186,6 +189,7 @@ if (turtleplot == nil) then
 			};
 		end
 		
+		print("192");
 		turtpeplot.calcAngleZ = function(angle, distance) 
 			local target = position.calcAngle2d(angle, distance);
 			return {x = position.x + target.h, y = position.y + target.v, z = position.z};
