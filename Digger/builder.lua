@@ -63,9 +63,10 @@ if (builder == nil) then
 	
 	local sortVectors = function(vectors)
 		local results = {};
+		
+		local plots = {};
 		local layers = groupBy(vectors, function(v) return v.z; end);
 		for il, layer in ipairs(layers) do
-			local plots = {};
 			local rows = groupBy(layer, function(v) return v.y; end);
 			for ir, row in ipairs(rows) do
 				local columns = groupBy(row, function(v) return v.x; end);
@@ -73,15 +74,15 @@ if (builder == nil) then
 					table.insert(plots, column[1]);
 				end
 			end
+		end
 			
-			if (plots[1] ~= nil) then
-				local plot = table.remove(plots, 1);
+		if (plots[1] ~= nil) then
+			local plot = table.remove(plots, 1);
+			table.insert(results, plot);
+			
+			while (plots[1] ~= nil) do
+				plot = extractNearestVector(plots, plot);
 				table.insert(results, plot);
-				
-				while (plots[1] ~= nil) do
-					plot = extractNearestVector(plots, plot);
-					table.insert(results, plot);
-				end
 			end
 		end
 		return results;
