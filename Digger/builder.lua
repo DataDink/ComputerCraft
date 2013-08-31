@@ -113,7 +113,7 @@ if (builder == nil) then
 		local plots = {};
 		local step = 45 / radius;
 		if (startV == nil) then startV = 0; end
-		if (endV == nil) then endV = 360; end
+		if (endV == nil) then endV = 180; end
 		if (startH == nil) then startH = 0; end
 		if (endH == nil) then endH = 360; end
 		
