@@ -153,10 +153,5 @@ if (builder == nil) then
 		turtle.select(builder.findInventory());
 		turtle.placeDown();
 	end
-
-	local plots = builder.sphere(10);
-	for i, v in pairs(plots) do
-		print(v.x .. " " .. v.y .. " " .. v.z);
-	end
 end
 
