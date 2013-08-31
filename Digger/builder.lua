@@ -1,12 +1,6 @@
 if (builder == nil) then
 	builder = {};
 	
-	local count = function(t)
-		local c = 0;
-		for i, v in pairs(t) do c = c + 1; end
-		return c;
-	end
-	
 	local function round(number)
 		if (number % 1 >= 0.5) then
 			return math.ceil(number);
@@ -22,111 +16,75 @@ if (builder == nil) then
 		};
 	end
 	
-	local measure = function(h, v, d)
-		if (d == nil) then d = 0; end
-		return math.sqrt(h*h + v*v + d*d);
+	local measure = function(x, y, z)
+		if (x == nil) then x = 0; end
+		if (y == nil) then y = 0; end
+		if (z == nil) then z = 0; end
+		return math.sqrt(x*x + y*y + z*z);
 	end
 	
-	local insertVector = function(collection, vector)
-		for i, v in pairs(collection) do
-			if (v.x == vector.x and v.y == vector.y and v.z == vector.z) then return; end
-		end
-		table.insert(collection, vector);
-	end
-	
-	local extractClosestVector = function(from, vectors)
-		local result = nil;
-		for i, v in pairs(vectors) do
-			local dist = measure(v.x - from.x, v.y - from.y, v.z - from.z);
-			if (result == nil or dist < result.distance) then
-				result = {
-					index = i,
-					vector = v,
-					distance = dist
-				};
+	local extractNearestVector = function(vectors, vector)
+		if (vectors == nill or vector == nil or vectors[1] == nil) then return nil; end
+		local index = 0;
+		local distance = nil;
+		
+		for i, compare in ipairs(vectors) do
+			local dist = measure(compare.x - vector.x, compare.y - vector.y, compare.z - vector.z);
+			if (distance == nil or dist < distance) then
+				distance = dist;
+				index = i;
 			end
 		end
-		if (result == nil) then return nil; end
-		return table.remove(vectors, result.index);
+		
+		return table.remove(vectors, index);
 	end
 	
-	local sortBy = function(objects, indexer)
+	local groupBy = function(objects, indexer)
 		local results = {};
 		local indexed = {};
-		local indexes = {};
 		
-		for i, v in pairs(objects) do
-			local key = indexer(v);
+		for i, object in ipairs(objects) do
+			local key = indexer(object);
 			if (indexed[key] == nil) then indexed[key] = {}; end
-			table.insert(indexed[key], v);
-			table.insert(indexes, key);
+			table.insert(indexed[key], object);
 		end
 		
+		local indexes = {};
+		for key in pairs(indexed) do
+			table.insert(indexes, key);
+		end
 		table.sort(indexes);
-		for i, key in pairs(indexes) do
-			for i2, v in pairs(indexed[key]) do
-				table.insert(results, v);
-			end
+		
+		for i, key in ipairs(indexes) do
+			table.insert(results, indexed[key]);
 		end
 		return results;
 	end
 	
-	local groupBy = function(objects, indexer)
-		local byIndex = {};
-		for i, v in pairs(objects) do
-			local key = indexer(v);
-			if (byIndex[key] == nil) then byIndex[key] = {}; end
-			table.insert(byIndex[key], v);
-		end
-		local indexes = {};
-		for i in pairs(byIndex) do
-			table.insert(indexes, i);
-		end
-		table.sort(indexes);
-		local result = {};
-		for i, v in pairs(indexes) do
-			table.insert(result, byIndex[v]);
-		end
-		return result;
-	end
-	
 	local sortVectors = function(vectors)
-		local result = {};
-		local refPoint = {};
-		local lastPlot = {x = 0, y = 0, z = 0};
+		local results = {};
 		local layers = groupBy(vectors, function(v) return v.z; end);
-
-		for i, layer in pairs(layers) do
-
-			layer = sortBy(layer, function(v) return v.y; end);
-			while (lastPlot ~= nil) do
-				lastPlot = extractClosestVector(lastPlot, layer);
-				if (lastPlot ~= nil) then table.insert(result, lastPlot); end
+		for il, layer in ipairs(layers) do
+			local plots = {};
+			local rows = groupBy(layer, function(v) return v.y; end);
+			for ir, row in ipairs(rows) do
+				local columns = groupBy(row, function(v) return v.x; end);
+				for ic, column in ipairs(columns) do
+					table.insert(plots, column[1]);
+				end
+			end
+			
+			if (plots[1] ~= nil) then
+				local plot = table.remove(plots, 1);
+				table.insert(results, plot);
+				
+				while (plots[1] ~= nil) do
+					plot = extractNearestVector(plots, plot);
+					table.insert(results, plot);
+				end
 			end
 		end
-		return result;
-	end
-	
-	builder.findInventory = function()
-		for i = 2, 16 do
-			if (turtle.getItemCount(i) > 0) then
-				return i;
-			end
-		end
-		return nil;
-	end
-	
-	builder.placeDown = function()
-		if (builder.findInventory() == nil) then
-			print("Waiting for inventory");
-			while (builder.findInventory() == nil) do
-				sleep(1);
-			end
-			print("Continuing in 15 seconds");
-			sleep(15);
-		end
-		turtle.select(builder.findInventory());
-		turtle.placeDown();
+		return results;
 	end
 	
 	builder.circle = function(radius, angleX, angleZ)
@@ -162,7 +120,7 @@ if (builder == nil) then
 			local xplot = plot(x, radius);
 			for z = startH, endH, step do
 				local zplot = plot(z, xplot.h);
-				insertVector(plots, {
+				table.insert(plots, {
 					x = round(zplot.h),
 					y = round(zplot.v),
 					z = round(xplot.v)
@@ -172,6 +130,28 @@ if (builder == nil) then
 		
 		local sorted = sortVectors(plots);
 		return sorted;
+	end
+		
+	builder.findInventory = function()
+		for i = 2, 16 do
+			if (turtle.getItemCount(i) > 0) then
+				return i;
+			end
+		end
+		return nil;
+	end
+	
+	builder.placeDown = function()
+		if (builder.findInventory() == nil) then
+			print("Waiting for inventory");
+			while (builder.findInventory() == nil) do
+				sleep(1);
+			end
+			print("Continuing in 15 seconds");
+			sleep(15);
+		end
+		turtle.select(builder.findInventory());
+		turtle.placeDown();
 	end
 
 	local plots = builder.sphere(10);
