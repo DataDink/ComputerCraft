@@ -154,11 +154,12 @@ if (builder == nil) then
 		local plots = {};
 		local step = 45 / radius;
 		
-		for x = 0, 180, step do
-			local xplot = calcPlot(x, radius);
-			for z = 0, 360, step do
-				local zplot = calcPlot(z, xplot.h);
-				local vector = { x = zplot.h, y = zplot.v, z = xplot.v };
+		for z = 0, 180, step do
+			local zplot = calcPlot(z, radius);
+			local xradius = zplot.v;
+			for x = 0, 360, step do
+				local xplot = calcPlot(x, xradius);
+				local vector = { x = zplot.h, y = xplot.h, z = xplot.v };
 				scaleVector(vector, xscale, yscale, zscale);
 				rotateVector(vector, xaxis, yaxis, zaxis);
 				roundVector(vector);
