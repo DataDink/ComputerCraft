@@ -9,7 +9,7 @@ if (builder == nil) then
 		end
 	end
 
-	local plot = function(angle, distance) 
+	local calcPlot = function(angle, distance) 
 		return {
 			h = math.cos(math.rad(angle)) * distance,
 			v = math.sin(math.rad(angle)) * distance
@@ -88,44 +88,80 @@ if (builder == nil) then
 		return results;
 	end
 	
-	builder.circle = function(radius, angleX, angleZ)
+	local rotateVector = function(vector, xaxis, yaxis, zaxis)
+		if (xaxis == nil) then xaxis = 0; end
+		if (yaxis == nil) then yaxis = 0; end
+		if (zaxis == nil) then zaxis = 0; end
+		
+		if (xaxis == 0 and yaxis == 0 and zaxis == 0) then return; end
+
+		local xcos = math.cos(math.rad(xaxis));
+		local xsin = math.sin(math.rad(xaxis));
+		local xz = xcos * vector.z - xsin * vector.y;
+		local xy = xsin * vector.z + xcos * vector.y;
+		vector.z = xz;
+		vector.y = xy;
+		
+		local ycos = math.cos(math.rad(yaxis));
+		local ysin = math.sin(math.rad(yaxis));
+		local yx = ycos * vector.x - ysin * vector.z;
+		local yz = ysin * vector.x + ycos * vector.z;
+		vector.x = yx;
+		vector.z = yz;
+		
+		local zcos = math.cos(math.rad(zaxis));
+		local zsin = math.sin(math.rad(zaxis));
+		local zx = zcos * vector.x - zsin * vector.y;
+		local zy = zsin * vector.x + zcos * vector.y;
+		vector.x = zx;
+		vector.y = zy;
+	end
+	
+	local scaleVector = function(vector, xscale, yscale, zscale)
+		if (xscale == nil) then xscale = 1; end
+		if (yscale == nil) then yscale = 1; end
+		if (zscale == nil) then zscale = 1; end
+		if (xscale == 1 and yscale == 1 and zscale == 1) then return; end
+		vector.x = vector.x * xscale;
+		vector.y = vector.y * yscale;
+		vector.z = vector.z * zscale;
+	end
+	
+	local roundVector = function(vector)
+		vector.x = round(vector.x);
+		vector.y = round(vector.y);
+		vector.z = round(vectro.z);
+	end
+	
+	builder.circle = function(radius, xscale, yscale, xaxis, yaxis)
 		local plots = {};
 		local step = 45 / radius;
 		if (angleX == nil) then angleX = 0; end
 		if (angleZ == nil) then angleZ = 0; end
 		for angle = 0, 360, step do
-			local fplot = plot(angle, radius);
-			local xplot = plot(angleX, fplot.v);
-			local nplot = {x = fplot.h, y = xplot.h, z = xplot.v};
-			local zplot = {
-				x = round(math.cos(math.rad(angleZ)) * nplot.x - math.sin(math.rad(angleZ)) * nplot.y),
-				y = round(math.sin(math.rad(angleZ)) * nplot.x + math.cos(math.rad(angleZ)) * nplot.y),
-				z = round(nplot.z)
-			};
-			
+			local plot = calcPlot(angle, radius);
+			local vector = {x = plot.h, y = plot.h, z = 0};
+			scaleVector(plot, xscale, yscale);
+			rotateVector(plot, xaxis, yaxis);
+			roundVector(plot);
 			table.insert(plots, zplot);
 		end
 		local sorted = sortVectors(plots);
 		return sorted;
 	end
 	
-	builder.sphere = function(radius, startV, endV, startH, endH)
+	builder.sphere = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 		local plots = {};
 		local step = 45 / radius;
-		if (startV == nil) then startV = 0; end
-		if (endV == nil) then endV = 180; end
-		if (startH == nil) then startH = 0; end
-		if (endH == nil) then endH = 360; end
 		
-		for x = startV, endV, step do
-			local xplot = plot(x, radius);
-			for z = startH, endH, step do
-				local zplot = plot(z, xplot.h);
-				table.insert(plots, {
-					x = round(zplot.h),
-					y = round(zplot.v),
-					z = round(xplot.v)
-				});
+		for x = 0, 180, step do
+			local xplot = calcPlot(x, radius);
+			for z = 0, 360, step do
+				local zplot = calcPlot(z, xplot.h);
+				local vector = { x = zplot.h, y = zplot.v, z = xplot.v };
+				scaleVector(vector, xscale, yscale, zscale);
+				rotateVector(vector, xaxis, yaxis, zaxis);
+				roundVector(vector);
 			end
 		end
 		
