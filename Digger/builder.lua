@@ -162,6 +162,7 @@ if (builder == nil) then
 				scaleVector(vector, xscale, yscale, zscale);
 				rotateVector(vector, xaxis, yaxis, zaxis);
 				roundVector(vector);
+				table.insert(plots, vector);
 			end
 		end
 		
