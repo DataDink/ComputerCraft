@@ -139,7 +139,7 @@ if (builder == nil) then
 			rotateVector(vector, xaxis, yaxis, zaxis);
 			roundVector(vector);
 		end
-		return sortVectors(plots);
+		return sortVectors(vectors);
 	end
 	
 	builder.circle = function(radius, xscale, yscale, xaxis, yaxis, zaxis)
