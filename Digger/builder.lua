@@ -130,7 +130,7 @@ if (builder == nil) then
 	local roundVector = function(vector)
 		vector.x = round(vector.x);
 		vector.y = round(vector.y);
-		vector.z = round(vectro.z);
+		vector.z = round(vector.z);
 	end
 	
 	builder.circle = function(radius, xscale, yscale, xaxis, yaxis)
