@@ -162,7 +162,6 @@ if (builder == nil) then
 				scaleVector(vector, xscale, yscale, zscale);
 				rotateVector(vector, xaxis, yaxis, zaxis);
 				roundVector(vector);
-				print(vector.x .. " " .. vector.y .. " " .. vector.z);
 			end
 		end
 		
