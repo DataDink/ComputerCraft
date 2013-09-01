@@ -159,6 +159,7 @@ if (builder == nil) then
 			for z = 0, 360, step do
 				local zplot = calcPlot(z, xplot.h);
 				local vector = { x = zplot.h, y = zplot.v, z = xplot.v };
+				print(vector.x .. " " .. vector.y .. " " .. vector.z);
 				scaleVector(vector, xscale, yscale, zscale);
 				rotateVector(vector, xaxis, yaxis, zaxis);
 				roundVector(vector);
