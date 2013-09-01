@@ -133,6 +133,15 @@ if (builder == nil) then
 		vector.z = round(vector.z);
 	end
 	
+	local ajustVectors(vectors, xscale, yscale, zscale, xaxis, yaxis, zaxis)
+		for i, vector in ipairs(vectors) do
+			scaleVector(vector, xscale, yscale, zscale);
+			rotateVector(vector, xaxis, yaxis, zaxis);
+			roundVector(vector);
+		end
+		return sortVectors(plots);
+	end
+	
 	builder.circle = function(radius, xscale, yscale, xaxis, yaxis, zaxis)
 		local plots = {};
 		local step = 45 / radius;
@@ -140,14 +149,9 @@ if (builder == nil) then
 		if (angleZ == nil) then angleZ = 0; end
 		for angle = 0, 360, step do
 			local plot = calcPlot(angle, radius);
-			local vector = {x = plot.h, y = plot.h, z = 0};
-			scaleVector(plot, xscale, yscale);
-			rotateVector(plot, xaxis, yaxis, zaxis);
-			roundVector(plot);
-			table.insert(plots, zplot);
+			table.insert(plots, {x = plot.h, y = plot.h, z = 0});
 		end
-		local sorted = sortVectors(plots);
-		return sorted;
+		return ajustVectors(plots, xscale, yscale, nil, xaxis, yaxis, zaxis);
 	end
 	
 	builder.sphere = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
@@ -159,16 +163,10 @@ if (builder == nil) then
 			local xradius = zplot.v;
 			for x = 0, 360, step do
 				local xplot = calcPlot(x, xradius);
-				local vector = { x = zplot.h, y = xplot.h, z = xplot.v };
-				scaleVector(vector, xscale, yscale, zscale);
-				rotateVector(vector, xaxis, yaxis, zaxis);
-				roundVector(vector);
-				table.insert(plots, vector);
+				table.insert(plots, { x = zplot.h, y = xplot.h, z = xplot.v });
 			end
 		end
-		
-		local sorted = sortVectors(plots);
-		return sorted;
+		return ajustVectors(plots, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 	end
 	
 	builder.square = function(radius, xscale, yscale, xaxis, yaxis, zaxis)
@@ -179,19 +177,13 @@ if (builder == nil) then
 			table.insert(plots, {x = -radius, y = v, z = 0});
 			table.insert(plots, {x = radius, y = v, z = 0});
 		end
-
-		for i, vector in ipairs(plots) do
-			scaleVector(vector, xscale, yscale);
-			rotateVector(vector, xaxis, yaxis, zaxis);
-			roundVector(vector);
-		end
-		return sortVectors(plots);
+		return ajustVectors(plots, xscale, yscale, nil, xaxis, yaxis, zaxis);
 	end
 	
 	builder.cube = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 		local plots = {};
-		for h = -radius, radius do
-			for v = -radius, radius do
+		for h = -radius, radius, 0.5 do
+			for v = -radius, radius, 0.5 do
 				table.insert(plots, {x = h, y = v, z = -radius});
 				table.insert(plots, {x = h, y = v, z = radius});
 				table.insert(plots, {x = h, y = -radius, z = v});
@@ -200,13 +192,25 @@ if (builder == nil) then
 				table.insert(plots, {x = radius, y = h, z = v});
 			end
 		end
-		
-		for i, vector in ipairs(plots) do
-			scaleVector(vector, xscale, yscale, zscale);
-			rotateVector(vector, xaxis, yaxis, zaxis);
-			roundVector(vector);
+		return ajustVectors(plots, xscale, yscale, zscale, xaxis, yaxis, zaxis);
+	end
+	
+	builder.cone = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
+		local plots = {};
+		for r = 1, radius, 0.5 do
+			for a = 0, 360, (45 / r) do
+				local plot = calcPlot(a, r);
+				table.insert(plots, {x = plot.h, y = plot.v, z = r - radius / 2});
+			end
 		end
-		return sortVectors(plots);
+		return ajustVectors(plots, xscale, yscale, zscale, xaxis, yaxis, zaxis);
+	end
+	
+	builder.polygon = function(radius, sides, xscale, yscale, xaxis, yaxis, zaxis)
+		if (sides < 3) then return nil; end
+		local plots = {};
+		local step = 360 / sides;
+		// NYI
 	end
 		
 	builder.findInventory = function()
