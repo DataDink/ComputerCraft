@@ -210,7 +210,7 @@ if (builder == nil) then
 		if (sides < 3) then return nil; end
 		local plots = {};
 		local step = 360 / sides;
-		// NYI
+		-- NYI
 	end
 		
 	builder.findInventory = function()
