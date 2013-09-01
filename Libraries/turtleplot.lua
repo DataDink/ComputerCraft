@@ -6,6 +6,8 @@ if (turtleplot == nil) then
 		
 		turtleplot.getPosition = function() return position.x, position.y, position.z; end
 		
+		turtleplot.resetPosition = function() position.x = 0; position.y = 0; position.z = 0; position.d = 270; end 
+		
 		position.face = function(direction)
 			if (direction == position.d) then return true; end
 			local leftangle = (position.d + 270) % 360;
