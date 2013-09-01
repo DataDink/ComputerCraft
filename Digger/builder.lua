@@ -161,8 +161,8 @@ if (builder == nil) then
 				local vector = { x = zplot.h, y = zplot.v, z = xplot.v };
 				scaleVector(vector, xscale, yscale, zscale);
 				rotateVector(vector, xaxis, yaxis, zaxis);
-				print(vector.x .. " " .. vector.y .. " " .. vector.z);
 				roundVector(vector);
+				print(vector.x .. " " .. vector.y .. " " .. vector.z);
 			end
 		end
 		
