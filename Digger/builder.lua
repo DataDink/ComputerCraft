@@ -133,7 +133,7 @@ if (builder == nil) then
 		vector.z = round(vector.z);
 	end
 	
-	local ajustVectors(vectors, xscale, yscale, zscale, xaxis, yaxis, zaxis)
+	local ajustVectors = function(vectors, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 		for i, vector in ipairs(vectors) do
 			scaleVector(vector, xscale, yscale, zscale);
 			rotateVector(vector, xaxis, yaxis, zaxis);
