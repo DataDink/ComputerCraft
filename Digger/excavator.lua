@@ -95,7 +95,6 @@ if (excavator == nil) then
 		-- Movement
 		move.calcReturnDist = function() return math.abs(position.current.x) + math.abs(position.current.y) + math.abs(position.current.z) + 4; end
 		move.face = function(direction)
-			print(direction);
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
 				turtle.turnLeft();
@@ -136,7 +135,6 @@ if (excavator == nil) then
 			return true;
 		end
 		move.to = function(x, y, z)
-			print(x .. " " .. y .. " " .. z);
 			while (position.current.z < z) do if (not move.direction(directions.up)) then return false; end end
 			while (position.current.z > z) do if (not move.direction(directions.down)) then return false; end end
 			while (position.current.x < x) do if (not move.direction(directions.right)) then return false; end end
@@ -215,25 +213,25 @@ if (excavator == nil) then
 			move.excavate(x, y, z);
 		end
 		
-		sleep(5);
-		move.face(directions.forward);
-		sleep(1);
-		move.face(directions.right);
-		sleep(1);
-		move.face(directions.backward)
-		sleep(1);
-		move.face(directions.left);
-		sleep(1);
-		move.face(directions.backward);
-		sleep(1);
-		move.face(directions.front);
-		sleep(1);
-		move.direction(directions.backward);
-		sleep(1);
-		move.direction(directions.forward);
-		sleep(1);
-		move.direction(directions.left);
-		sleep(1);
-		move.direction(directions.right);
+--		sleep(5);
+--		move.face(directions.forward);
+--		sleep(1);
+--		move.face(directions.right);
+--		sleep(1);
+--		move.face(directions.backward)
+--		sleep(1);
+--		move.face(directions.left);
+--		sleep(1);
+--		move.face(directions.backward);
+--		sleep(1);
+--		move.face(directions.front);
+--		sleep(1);
+--		move.direction(directions.backward);
+--		sleep(1);
+--		move.direction(directions.forward);
+--		sleep(1);
+--		move.direction(directions.left);
+--		sleep(1);
+--		move.direction(directions.right);
 	end)();	
 end
