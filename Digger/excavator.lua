@@ -98,10 +98,12 @@ if (excavator == nil) then
 			print(direction);
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
+				print("left");
 				turtle.turnLeft();
 				position.current.d = direction;
 			else
 				while (direction > position.current.d) do
+					print("right");
 					turtle.turnRight();
 					position.current.d = (position.current.d + 90) % 360;
 					print(direction .. " " .. position.current.d);
