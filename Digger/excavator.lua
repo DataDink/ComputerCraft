@@ -13,7 +13,7 @@ if (excavator == nil) then
 	
 		local position = {
 			marker = { x = 0, y = 0, z = 0 },
-			current = { x = 0, y = 0, z = 0, d = directions.forward },
+			current = { x = 0, y = 0, z = 0, d = directions.forward }
 		};
 		position.mark = function() 
 			position.marker.x = position.current.x; 
@@ -155,6 +155,7 @@ if (excavator == nil) then
 			turtle.drop();
 		end
 		move.excavate = function(x, y, z)
+			print(x .. " " .. y .. " " .. z);
 			position.reset();
 			fuel.initialize();
 			if (fuel.calcRemainingFuel() < 4) then
