@@ -214,5 +214,26 @@ if (excavator == nil) then
 		excavator.start = function(x, y, z)
 			move.excavate(x, y, z);
 		end
-	end)();
+		
+		sleep(5);
+		move.face(directions.forward);
+		sleep(1);
+		move.face(directions.right);
+		sleep(1);
+		move.face(directions.backward)
+		sleep(1);
+		move.face(directions.left);
+		sleep(1);
+		move.face(directions.backward);
+		sleep(1);
+		move.face(directions.front);
+		sleep(1);
+		move.direction(directions.backward);
+		sleep(1);
+		move.direction(directions.forward);
+		sleep(1);
+		move.direction(directions.left);
+		sleep(1);
+		move.direction(directions.right);
+	end)();	
 end
