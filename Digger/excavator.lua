@@ -95,6 +95,7 @@ if (excavator == nil) then
 		-- Movement
 		move.calcReturnDist = function() return math.abs(position.current.x) + math.abs(position.current.y) + math.abs(position.current.z) + 4; end
 		move.face = function(direction)
+			print(direction);
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
 				turtle.turnLeft();
@@ -103,6 +104,7 @@ if (excavator == nil) then
 				while (direction > position.current.d) do
 					turtle.turnRight();
 					position.current.d = (position.current.d + 90) % 360;
+					print(direction .. " " .. position.current.d);
 				end
 			end
 		end
@@ -158,7 +160,6 @@ if (excavator == nil) then
 			turtle.drop();
 		end
 		move.excavate = function(x, y, z)
-			print(x .. " " .. y .. " " .. z);
 			position.reset();
 			fuel.initialize();
 			if (fuel.calcRemainingFuel() < 4) then
@@ -178,7 +179,6 @@ if (excavator == nil) then
 				
 				for column in alternate(0, y) do
 					for row in alternate(0, x) do
-						print("DEBUG: Moving to " .. row .. ", " .. column .. ", " .. layer);
 					
 						if (fuel.needsRefuel()) then
 							print("Returning for refuel...");
