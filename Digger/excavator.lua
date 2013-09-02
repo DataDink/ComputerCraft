@@ -67,7 +67,6 @@ if (excavator == nil) then
 					end
 				end				
 			end
-			move.face(directions.forward);
 		end
 		
 		-- Movement
@@ -134,6 +133,7 @@ if (excavator == nil) then
 			inventory.unload();
 			turtle.select(1);
 			turtle.drop();
+			move.face(directions.forward);
 		end
 		move.excavate = function(x, y, z)
 			position.reset();
