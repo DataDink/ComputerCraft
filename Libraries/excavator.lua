@@ -142,27 +142,32 @@ if (excavator == nil) then
 				error("Aborting: Insufficient fuel.");
 			end
 			
-			local ystep = 1;
-			if (y < 0) then ystep = -1; end
 			local row = 0;
+			local rowStep = y / math.abs(y);
+			local rowMax = math.max(0, y);
+			local rowMin = math.min(0, y);
 			
-			local xstep = 1;
-			if (x < 0) then xstep = -1; end
 			local column = 0;
+			local columnStep = x / math.abs(x);
+			local columnMax = math.max(0, x);
+			local columnMin = math.min(0, x);
 			
-			local startz = math.min(1, math.abs(z));
-			if (z < 0) then startz = -startz; end
-			local zstep = startz / 2 * 3;
+			local layer = 0;
+			local layerStart = z / math.abs(z);
+			local layerStep = layerStart * 3;
+			local layerMax = math.max(0, z);
+			local layerMin = math.min(0, z);
 			
-			for layer = startz, z, zstep do
+			for layer = layerStart, z, layerStep do
+				move.face(directions.forward);
 				if (not move.to(position.current.x, position.current.y, layer)) then
 					print("Returning: Reached unbreakable blocks");
 					move.finish();
 					return;
 				end
 				
-				while (y > 0 and row <= y and row >= 0 or y < 0 and row <= 0 and row >= y) do
-					while (x > 0 and column <= x and column >= 0 or x < 0 and column <= 0 and column >= x) do
+				while (row >= rowMin and row <= rowMax) do
+					while (column >= columnMin and column <= columnMax) do
 						
 						if (fuel.needsRefuel()) then
 							print("Returning for refuel...");
@@ -191,20 +196,16 @@ if (excavator == nil) then
 							return move.finish();
 						end
 						
-						column = column + xstep;
+						column = column + columnStep;
 					end
-					if (x > 0 and column > x) then column = x; end
-					if (x < 0 and column > 0) then column = 0; end
-					if (x > 0 and column < 0) then column = 0; end
-					if (x < 0 and column < x) then column = x; end
-					xstep = -xstep;
-					row = row + ystep;
+					if (column > columnMax) then column = columnMax; end
+					if (column < columnMin) then column = columnMin; end
+					columnStep = -columnStep;
+					row = row + rowStep;
 				end
-				if (y > 0 and row > y) then row = y; end
-				if (y < 0 and row > 0) then row = 0; end
-				if (y > 0 and row < 0) then row = 0; end
-				if (y < 0 and row < y) then row = y; end
-				ystep = -ystep;				
+				if (row > rowMax) then row = rowMax; end
+				if (row < rowMin) then row = rowMin; end
+				rowStep = -rowStep;				
 			end
 			
 			print("Returning: Mission complete");
