@@ -13,7 +13,6 @@ if (excavator == nil) then
 	
 		local position = {
 			marker = { x = 0, y = 0, z = 0 },
-			target = { x = 0, y = 0, z = 0 },
 			current = { x = 0, y = 0, z = 0, d = directions.forward },
 		};
 		position.mark = function() 
@@ -57,11 +56,7 @@ if (excavator == nil) then
 		
 		-- Fuel
 		fuel.movesPerFuel = 0;
-		fuel.calcRemainingFuel = function() 
-			print(turtle);
-			print(turtle.getItemCount(1));
-			print(turtle.getFuelLevel());
-		return turtle.getItemCount(1) * movesPerFuel + turtle.getFuelLevel(); end
+		fuel.calcRemainingFuel = function() return turtle.getItemCount(1) * fuel.movesPerFuel + turtle.getFuelLevel(); end
 		fuel.needsRefuel = function() return move.calcReturnDist() >= fuel.calcRemainingFuel(); end
 		fuel.initialize = function()
 			local before = turtle.getFuelLevel();
@@ -190,7 +185,7 @@ if (excavator == nil) then
 									sleep(3);
 									turtle.select(1);
 								end
-								turtle.initialize();
+								fuel.initialize();
 								print("Continuing");
 							end);
 						end
