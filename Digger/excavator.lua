@@ -57,7 +57,11 @@ if (excavator == nil) then
 		
 		-- Fuel
 		fuel.movesPerFuel = 0;
-		fuel.calcRemainingFuel = function() return turtle.getItemCount(1) * movesPerFuel + turtle.getFuelLevel(); end
+		fuel.calcRemainingFuel = function() 
+			print(turtle);
+			print(turtle.getItemCount(1));
+			print(turtle.getFuelLevel());
+		return turtle.getItemCount(1) * movesPerFuel + turtle.getFuelLevel(); end
 		fuel.needsRefuel = function() return move.calcReturnDist() >= fuel.calcRemainingFuel(); end
 		fuel.initialize = function()
 			local before = turtle.getFuelLevel();
