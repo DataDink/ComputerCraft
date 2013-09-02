@@ -67,6 +67,7 @@ if (excavator == nil) then
 					end
 				end				
 			end
+			move.face(directions.forward);
 		end
 		
 		-- Movement
