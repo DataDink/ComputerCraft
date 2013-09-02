@@ -150,7 +150,7 @@ if (excavator == nil) then
 			if (x < 0) then xstep = -1; end
 			local column = 0;
 			
-			local startz = math.min(2, math.abs(z));
+			local startz = math.min(1, math.abs(z));
 			if (z < 0) then startz = -startz; end
 			local zstep = startz / 2 * 3;
 			
