@@ -31,29 +31,6 @@ if (excavator == nil) then
 		local move = {};
 		local inventory = {};
 		
-		-- misc
-		local alternate = function(from, to, step)
-			if (step == nil) then
-				step = 1;
-				if (from > to) then step = -1; end
-			end
-			local index = from - step;
-			return function()
-				index = index + step;
-				local isForward = to > from;
-				local isBackward = to < from;
-				local reachedEnd = isForward and index >= to or isBackward and index <= to;
-				local reachedStart = isForward and index < from or isBackward and index > from;
-				if (reachedEnd) then
-					index = to;
-					step = -step;
-				elseif (reachedStart) then
-					return;
-				end
-				return index;
-			end
-		end
-		
 		-- Fuel
 		fuel.movesPerFuel = 0;
 		fuel.calcRemainingFuel = function() return turtle.getItemCount(1) * fuel.movesPerFuel + turtle.getFuelLevel(); end
@@ -146,13 +123,12 @@ if (excavator == nil) then
 		move.home = function(callback)
 			position.mark();
 			move.to(0, 0, 0);
-			if (callback ~= nil) then
-				callback();
-				move.to(position.marker.x, position.marker.y, position.marker.z);
-			end
+			callback();
+			move.to(position.marker.x, position.marker.y, position.marker.z);
 		end
 		move.finish = function()
-			move.home();
+			move.to(0, 0, 0);
+			move.face(directions.backward);
 			inventory.unload();
 			turtle.select(1);
 			turtle.drop();
@@ -163,6 +139,14 @@ if (excavator == nil) then
 			if (fuel.calcRemainingFuel() < 4) then
 				error("Aborting: Insufficient fuel.");
 			end
+			
+			local ystep = 1;
+			if (y < 0) then ystep = -1; end
+			local row = 0;
+			
+			local xstep = 1;
+			if (x < 0) then xstep = -1; end
+			local column = 0;
 			
 			local startz = math.min(2, math.abs(z));
 			if (z < 0) then startz = -startz; end
@@ -175,9 +159,9 @@ if (excavator == nil) then
 					return;
 				end
 				
-				for column in alternate(0, y) do
-					for row in alternate(0, x) do
-					
+				while (y > 0 and row <= y and row >= 0 or y < 0 and row <= 0 and row >= y) do
+					while (x > 0 and column <= x and column >= 0 or x < 0 and column <= 0 and column >= x) do
+						
 						if (fuel.needsRefuel()) then
 							print("Returning for refuel...");
 							move.home(function() 
@@ -200,38 +184,30 @@ if (excavator == nil) then
 							end);
 						end
 						
-						if (not move.to(row, column, layer)) then
+						if (not move.to(column, row, layer)) then
 							print("Returning: Reached unbreakable blocks");
-							move.finish();
+							return move.finish();
 						end
+						
+						column = column + xstep;
 					end
+					if (x > 0 and column > x) then column = x; end
+					if (x < 0 and column > 0) then column = 0; end
+					if (x > 0 and column < 0) then column = 0; end
+					if (x < 0 and column < x) then column = x; end
+					xstep = -xstep;
+					row = row + ystep;
 				end
+				if (y > 0 and row > y) then row = y; end
+				if (y < 0 and row > 0) then row = 0; end
+				if (y > 0 and row < 0) then row = 0; end
+				if (y < 0 and row < y) then row = y; end
+				ystep = -ystep;				
 			end
 		end
 	
 		excavator.start = function(x, y, z)
 			move.excavate(x, y, z);
 		end
-		
---		sleep(5);
---		move.face(directions.forward);
---		sleep(1);
---		move.face(directions.right);
---		sleep(1);
---		move.face(directions.backward)
---		sleep(1);
---		move.face(directions.left);
---		sleep(1);
---		move.face(directions.backward);
---		sleep(1);
---		move.face(directions.front);
---		sleep(1);
---		move.direction(directions.backward);
---		sleep(1);
---		move.direction(directions.forward);
---		sleep(1);
---		move.direction(directions.left);
---		sleep(1);
---		move.direction(directions.right);
 	end)();	
 end
