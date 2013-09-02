@@ -98,15 +98,12 @@ if (excavator == nil) then
 			print(direction);
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
-				print("left");
 				turtle.turnLeft();
 				position.current.d = direction;
 			else
 				while (direction > position.current.d) do
-					print("right");
 					turtle.turnRight();
 					position.current.d = (position.current.d + 90) % 360;
-					print(direction .. " " .. position.current.d);
 				end
 			end
 		end
@@ -139,6 +136,7 @@ if (excavator == nil) then
 			return true;
 		end
 		move.to = function(x, y, z)
+			print(x .. " " .. y .. " " .. z);
 			while (position.current.z < z) do if (not move.direction(directions.up)) then return false; end end
 			while (position.current.z > z) do if (not move.direction(directions.down)) then return false; end end
 			while (position.current.x < x) do if (not move.direction(directions.right)) then return false; end end
