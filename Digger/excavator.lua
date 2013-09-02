@@ -106,30 +106,33 @@ if (excavator == nil) then
 				end
 			end
 		end
+		move.dig = function(direction)
+			if (turtle.detectUp() and (not turtle.digUp()) and direction == directions.up) then return false; end
+			if (turtle.detectDown() and (not turtle.digDown()) and direction == directions.down) then return false; end
+			if (turtle.detect() and (not turtle.dig()) and direction ~= directions.up and direction ~= directions.down) then return false; end
+			return true;
+		end
 		move.direction = function(direction)
-			sleep(0.01);
 			move.face(direction);
-			turtle.digUp(); turtle.digDown(); turtle.dig();
+			if (not move.dig(direction)) then return false; end
 			fuel.refuel();
-			
-			if (direction == directions.up and turtle.detectUp()) then return false; end
-			if (direction == directions.down and turtle.detectDown()) then return false; end
-			if (turtle.detect()) then return false; end
-			
+						
 			local method = turtle.forward;
 			if (direction == directions.up) then method = turtle.up end
 			if (direction == directions.down) then  method = turtle.down end
-			if (method()) then
-				if (direction == directions.up) then position.current.z = position.current.z + 1; 
-				elseif (direction == directions.down) then position.current.z = position.current.z - 1; 
-				elseif (direction == directions.front) then position.current.y = position.current.y + 1; 
-				elseif (direction == directions.back) then position.current.y = position.current.y - 1; 
-				elseif (direction == directions.left) then position.current.x = position.current.x - 1; 
-				elseif (direction == directions.right) then position.current.x = position.current.x + 1; end
-				return true;
-			else
-				return false;
+			
+			while (not method()) do
+				sleep(0.01);
+				if (not move.dig(direction)) then return false; end
 			end
+
+			if (direction == directions.up) then position.current.z = position.current.z + 1; 
+			elseif (direction == directions.down) then position.current.z = position.current.z - 1; 
+			elseif (direction == directions.front) then position.current.y = position.current.y + 1; 
+			elseif (direction == directions.back) then position.current.y = position.current.y - 1; 
+			elseif (direction == directions.left) then position.current.x = position.current.x - 1; 
+			elseif (direction == directions.right) then position.current.x = position.current.x + 1; end
+			return true;
 		end
 		move.to = function(x, y, z)
 			while (position.current.z < z) do if (not move.direction(directions.up)) then return false; end end
