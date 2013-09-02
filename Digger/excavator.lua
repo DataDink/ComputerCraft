@@ -204,6 +204,9 @@ if (excavator == nil) then
 				if (y < 0 and row < y) then row = y; end
 				ystep = -ystep;				
 			end
+			
+			print("Returning: Mission complete");
+			move.finish();
 		end
 	
 		excavator.start = function(x, y, z)
