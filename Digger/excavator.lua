@@ -125,6 +125,7 @@ if (excavator == nil) then
 			position.mark();
 			move.to(0, 0, 0);
 			callback();
+			move.face(directions.forward);
 			move.to(position.marker.x, position.marker.y, position.marker.z);
 		end
 		move.finish = function()
