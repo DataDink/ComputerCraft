@@ -101,7 +101,7 @@ if (excavator == nil) then
 				turtle.turnLeft();
 				position.current.d = direction;
 			else
-				while (direction > position.current.d) do
+				while (direction ~= position.current.d) do
 					turtle.turnRight();
 					position.current.d = (position.current.d + 90) % 360;
 				end
