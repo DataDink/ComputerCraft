@@ -13,8 +13,7 @@ if (excavator == nil) then
 	
 		local position = {
 			marker = { x = 0, y = 0, z = 0 },
-			target = { x = 0, y = 0, z = 0 },
-			current = { x = 0, y = 0, z = 0, d = directions.forward },
+			current = { x = 0, y = 0, z = 0, d = directions.forward }
 		};
 		position.mark = function() 
 			position.marker.x = position.current.x; 
@@ -32,32 +31,9 @@ if (excavator == nil) then
 		local move = {};
 		local inventory = {};
 		
-		-- misc
-		local alternate = function(from, to, step)
-			if (step == nil) then
-				step = 1;
-				if (from > to) then step = -1; end
-			end
-			local index = from - step;
-			return function()
-				index = index + step;
-				local isForward = to > from;
-				local isBackward = to < from;
-				local reachedEnd = isForward and index >= to or isBackward and index <= to;
-				local reachedStart = isForward and index < from or isBackward and index > from;
-				if (reachedEnd) then
-					index = to;
-					step = -step;
-				elseif (reachedStart) then
-					return;
-				end
-				return index;
-			end
-		end
-		
 		-- Fuel
 		fuel.movesPerFuel = 0;
-		fuel.calcRemainingFuel = function() return turtle.getItemCount(1) * movesPerFuel + turtle.getFuelLevel(); end
+		fuel.calcRemainingFuel = function() return turtle.getItemCount(1) * fuel.movesPerFuel + turtle.getFuelLevel(); end
 		fuel.needsRefuel = function() return move.calcReturnDist() >= fuel.calcRemainingFuel(); end
 		fuel.initialize = function()
 			local before = turtle.getFuelLevel();
@@ -91,46 +67,50 @@ if (excavator == nil) then
 					end
 				end				
 			end
+			move.face(directions.forward);
 		end
 		
 		-- Movement
-		move.calcReturnDist = function() return math.abs(target.x - position.x) + math.abs(target.y - position.y) + math.abs(target.z - position.z); end
+		move.calcReturnDist = function() return math.abs(position.current.x) + math.abs(position.current.y) + math.abs(position.current.z) + 4; end
 		move.face = function(direction)
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
 				turtle.turnLeft();
 				position.current.d = direction;
 			else
-				while (direction > position.current.d) do
+				while (direction ~= position.current.d) do
 					turtle.turnRight();
 					position.current.d = (position.current.d + 90) % 360;
 				end
 			end
 		end
+		move.dig = function(direction)
+			if (turtle.detectUp() and (not turtle.digUp()) and direction == directions.up) then return false; end
+			if (turtle.detectDown() and (not turtle.digDown()) and direction == directions.down) then return false; end
+			if (turtle.detect() and (not turtle.dig()) and direction ~= directions.up and direction ~= directions.down) then return false; end
+			return true;
+		end
 		move.direction = function(direction)
-			sleep(0.01);
 			move.face(direction);
-			turtle.digUp(); turtle.digDown(); turtle.dig();
+			if (not move.dig(direction)) then return false; end
 			fuel.refuel();
-			
-			if (direction == directions.up and turtle.detectUp()) then return false; end
-			if (direction == directions.down and turtle.detectDown()) then return false; end
-			if (turtle.detect()) then return false; end
-			
+						
 			local method = turtle.forward;
 			if (direction == directions.up) then method = turtle.up end
 			if (direction == directions.down) then  method = turtle.down end
-			if (method()) then
-				if (direction == directions.up) then position.current.z = position.current.z + 1; 
-				elseif (direction == directions.down) then position.current.z = position.current.z - 1; 
-				elseif (direction == directions.front) then position.current.y = position.current.y + 1; 
-				elseif (direction == directions.back) then position.current.y = position.current.y - 1; 
-				elseif (direction == directions.left) then position.current.x = position.current.x - 1; 
-				elseif (direction == directions.right) then position.current.x = position.current.x + 1; end
-				return true;
-			else
-				return false;
+			
+			while (not method()) do
+				sleep(0.01);
+				if (not move.dig(direction)) then return false; end
 			end
+
+			if (direction == directions.up) then position.current.z = position.current.z + 1; 
+			elseif (direction == directions.down) then position.current.z = position.current.z - 1; 
+			elseif (direction == directions.front) then position.current.y = position.current.y + 1; 
+			elseif (direction == directions.back) then position.current.y = position.current.y - 1; 
+			elseif (direction == directions.left) then position.current.x = position.current.x - 1; 
+			elseif (direction == directions.right) then position.current.x = position.current.x + 1; end
+			return true;
 		end
 		move.to = function(x, y, z)
 			while (position.current.z < z) do if (not move.direction(directions.up)) then return false; end end
@@ -144,13 +124,13 @@ if (excavator == nil) then
 		move.home = function(callback)
 			position.mark();
 			move.to(0, 0, 0);
-			if (callback ~= nil) then
-				callback();
-				move.to(position.marker.x, position.marker.y, position.marker.z);
-			end
+			callback();
+			move.face(directions.forward);
+			move.to(position.marker.x, position.marker.y, position.marker.z);
 		end
 		move.finish = function()
-			move.home();
+			move.to(0, 0, 0);
+			move.face(directions.backward);
 			inventory.unload();
 			turtle.select(1);
 			turtle.drop();
@@ -162,7 +142,15 @@ if (excavator == nil) then
 				error("Aborting: Insufficient fuel.");
 			end
 			
-			local startz = math.min(2, math.abs(z));
+			local ystep = 1;
+			if (y < 0) then ystep = -1; end
+			local row = 0;
+			
+			local xstep = 1;
+			if (x < 0) then xstep = -1; end
+			local column = 0;
+			
+			local startz = math.min(1, math.abs(z));
 			if (z < 0) then startz = -startz; end
 			local zstep = startz / 2 * 3;
 			
@@ -173,10 +161,9 @@ if (excavator == nil) then
 					return;
 				end
 				
-				for column in alternate(0, y) do
-					for row in alternate(0, x) do
-						print("DEBUG: Moving to " .. row .. ", " .. column .. ", " .. layer);
-					
+				while (y > 0 and row <= y and row >= 0 or y < 0 and row <= 0 and row >= y) do
+					while (x > 0 and column <= x and column >= 0 or x < 0 and column <= 0 and column >= x) do
+						
 						if (fuel.needsRefuel()) then
 							print("Returning for refuel...");
 							move.home(function() 
@@ -186,7 +173,7 @@ if (excavator == nil) then
 									sleep(3);
 									turtle.select(1);
 								end
-								turtle.initialize();
+								fuel.initialize();
 								print("Continuing");
 							end);
 						end
@@ -199,17 +186,33 @@ if (excavator == nil) then
 							end);
 						end
 						
-						if (not move.to(row, column, layer)) then
+						if (not move.to(column, row, layer)) then
 							print("Returning: Reached unbreakable blocks");
-							move.finish();
+							return move.finish();
 						end
+						
+						column = column + xstep;
 					end
+					if (x > 0 and column > x) then column = x; end
+					if (x < 0 and column > 0) then column = 0; end
+					if (x > 0 and column < 0) then column = 0; end
+					if (x < 0 and column < x) then column = x; end
+					xstep = -xstep;
+					row = row + ystep;
 				end
+				if (y > 0 and row > y) then row = y; end
+				if (y < 0 and row > 0) then row = 0; end
+				if (y > 0 and row < 0) then row = 0; end
+				if (y < 0 and row < y) then row = y; end
+				ystep = -ystep;				
 			end
+			
+			print("Returning: Mission complete");
+			move.finish();
 		end
 	
 		excavator.start = function(x, y, z)
 			move.excavate(x, y, z);
 		end
-	end)();
+	end)();	
 end
