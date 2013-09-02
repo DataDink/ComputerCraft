@@ -93,7 +93,7 @@ if (excavator == nil) then
 		end
 		
 		-- Movement
-		move.calcReturnDist = function() return math.abs(target.x - position.x) + math.abs(target.y - position.y) + math.abs(target.z - position.z); end
+		move.calcReturnDist = function() return math.abs(position.current.x) + math.abs(position.current.y) + math.abs(position.current.z) + 4; end
 		move.face = function(direction)
 			if (direction == directions.up or direction == directions.down or direction == position.current.d) then return; end
 			if (direction == (position.current.d + 270) % 360) then 
