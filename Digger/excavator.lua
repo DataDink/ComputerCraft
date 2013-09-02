@@ -15,9 +15,18 @@ if (excavator == nil) then
 			marker = { x = 0, y = 0, z = 0 },
 			target = { x = 0, y = 0, z = 0 },
 			current = { x = 0, y = 0, z = 0, d = directions.forward },
-			mark = function() position.marker.x = position.current.x; position.marker.y = position.current.x; position.marker.z = position.current.z; end,
-			reset = function() position.current.x = 0; position.current.y = 0; position.current.z = 0; position.current.d = directions.forward; end
 		};
+		position.mark = function() 
+			position.marker.x = position.current.x; 
+			position.marker.y = position.current.y; 
+			position.marker.z = position.current.z; 
+		end
+		position.reset = function() 
+			position.current.x = 0; 
+			position.current.y = 0; 
+			position.current.z = 0; 
+			position.current.d = directions.forward; 
+		end
 		
 		local fuel = {};
 		local move = {};
