@@ -113,6 +113,7 @@ if (turtleplot == nil) then
 		end
 		
 		position.moveTo = function(x, y, z, mode)
+			x = round(x); y = round(y); z = round(z);
 			while (round(x) > position.x) do
 				position.move(0, mode);
 			end
