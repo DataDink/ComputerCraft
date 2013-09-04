@@ -305,25 +305,25 @@ if (builder == nil) then
 		
 		builder.sphere = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.circle(radius);
-			local shape = generate.sphere(radius);
+			local shape = generate.sphere(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.cylinder = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.circle(radius);
-			local shape = generate.cylinder(radius);
+			local shape = generate.cylinder(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.bar = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.circle(radius);
-			local shape = generate.cube(radius);
+			local shape = generate.cube(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.cone = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.circle(radius);
-			local shape = generate.cone(radius);
+			local shape = generate.cone(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
@@ -334,7 +334,7 @@ if (builder == nil) then
 		
 		builder.cube = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.square(radius);
-			local shape = generate.cube(radius);
+			local shape = generate.cube(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
@@ -345,25 +345,25 @@ if (builder == nil) then
 		
 		builder.polysphere = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.polygon(radius, sides);
-			local shape = generate.sphere(radius);
+			local shape = generate.sphere(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.polycylinder = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.polygon(radius, sides);
-			local shape = generate.cylinder(radius);
+			local shape = generate.cylinder(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.polycube = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.polygon(radius, sides);
-			local shape = generate.cube(radius);
+			local shape = generate.cube(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 		
 		builder.polycone = function(radius, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			local crossSection = generate.polygon(radius, sides);
-			local shape = generate.cone(radius);
+			local shape = generate.cone(radius, crossSection);
 			return calc.ajustVectors(shape, xscale, yscale, zscale, xaxis, yaxis, zaxis);
 		end
 			
