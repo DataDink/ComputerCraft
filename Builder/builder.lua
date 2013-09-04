@@ -73,9 +73,9 @@ if (builder == nil) then
 		end
 		calc.ajustVectors = function(vectors, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			for i, vector in ipairs(vectors) do
-				calc.scaleVector(vector, xscale, yscale, zscale);
-				calc.rotateVector(vector, xaxis, yaxis, zaxis);
-				calc.roundVector(vector);
+				calc.scaleVectors(vector, xscale, yscale, zscale);
+				calc.rotateVectors(vector, xaxis, yaxis, zaxis);
+				calc.roundVectors(vector);
 			end
 			return collection.sortVectors(vectors);
 		end
