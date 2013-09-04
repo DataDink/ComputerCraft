@@ -14,7 +14,7 @@
 	for c = 1, 255 do
 		local left = screenSize.width % c + 1;
 		local top = math.floor(screenSize.height / c) + 1;
-		local character = string.char(i);
+		local character = string.char(c);
 		useMonitor(function() 
 			term.setCursorPos(left, top);
 			term.write(character);
