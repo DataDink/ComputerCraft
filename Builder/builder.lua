@@ -202,7 +202,7 @@ if (builder == nil) then
 						x = corner.h,
 						y = corner.v,
 						z = 0
-					});
+					}));
 				end
 				prevCorner = corner;
 			end
