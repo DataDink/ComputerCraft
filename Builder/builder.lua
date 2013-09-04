@@ -141,7 +141,7 @@ if (builder == nil) then
 					table.insert(results, vector);
 					
 					while (sorted[1] ~= nil) do
-						vector = extractNearestVector(sorted, vector);
+						vector = collection.extractNearestVector(sorted, vector);
 						table.insert(results, vector);
 					end
 				end
