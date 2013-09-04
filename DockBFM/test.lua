@@ -9,7 +9,7 @@
 	end
 	
 	local screenSize = {};
-	useMonitor(function() screenSize.width, screenSize.y = term.getSize(); end);
+	useMonitor(function() screenSize.width, screenSize.height = term.getSize(); end);
 
 	for c = 1, 255 do
 		local left = screenSize.width % c + 1;
