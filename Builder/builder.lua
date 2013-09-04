@@ -67,9 +67,9 @@ if (builder == nil) then
 			vector.z = vector.z * zscale;
 		end
 		calc.roundVectors = function(vector)
-			vector.x = round(vector.x);
-			vector.y = round(vector.y);
-			vector.z = round(vector.z);
+			vector.x = calc.round(vector.x);
+			vector.y = calc.round(vector.y);
+			vector.z = calc.round(vector.z);
 		end
 		calc.ajustVectors = function(vectors, xscale, yscale, zscale, xaxis, yaxis, zaxis)
 			for i, vector in ipairs(vectors) do
