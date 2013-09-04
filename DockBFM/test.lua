@@ -12,8 +12,8 @@
 	useMonitor(function() screenSize.width, screenSize.height = term.getSize(); end);
 
 	for c = 1, 255 do
-		local left = screenSize.width % c + 1;
-		local top = math.floor(screenSize.height / c) + 1;
+		local left = c % screenSize.width + 1;
+		local top = math.floor(c / screenSize.width) + 1;
 		local character = string.char(c);
 		useMonitor(function() 
 			term.setCursorPos(left, top);
