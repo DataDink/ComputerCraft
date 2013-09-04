@@ -185,6 +185,7 @@ if (builder == nil) then
 				local plot = calc.plot(angle, radius);
 				table.insert(vectors, {x = plot.h, y = plot.h, z = 0});
 			end
+			return vectors;
 		end
 		generate.polygon = function(radius, sides)
 			if (sides < 3) then return nil; end
