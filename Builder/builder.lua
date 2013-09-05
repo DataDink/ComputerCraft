@@ -249,7 +249,7 @@ if (builder == nil) then
 		generate.cone = function(radius, crossSection)
 			local result = {};
 			for z = -radius, radius do
-				local scale = 1 / radius * math.abs(z - radius);
+				local scale = 1 / radius * 2 * math.abs(z - radius);
 				for i, v in ipairs(crossSection) do
 					table.insert(result, {
 						x = v.x * scale,
