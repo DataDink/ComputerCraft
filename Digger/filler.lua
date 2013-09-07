@@ -43,7 +43,7 @@ if (filler == nil) then
 		local movement = {};
 		movement.fillRow = function(placeDelegate)
 			repeat
-				placeDelegate();
+				inventory.placeItem(placeDelegate);
 				fuel.manage();
 			until (not turtle.back());
 		end
