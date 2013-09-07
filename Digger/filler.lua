@@ -125,7 +125,7 @@ if (filler == nil) then
 			return false;
 		end
 		movement.unfill = function()
-			while (movement.eat) do
+			while (movement.eat()) do
 				sleep(.01);
 			end
 			print("Turtle is full, blocked, or completed.");
