@@ -52,7 +52,7 @@ if (filler == nil) then
 			local unturn = turtle.turnRight;
 			if (movement.direction) then 
 				turn = turtle.turnRight;
-				unturn = movement.turnLeft;
+				unturn = turtle.turnLeft;
 			end
 			movement.direction = not movement.direction;
 			turn();
