@@ -25,6 +25,12 @@ if (filler == nil) then
 			placeDelegate();
 			turtle.place();
 		end
+		inventory.isFull = function()
+			for i = 2, 16 do
+				if (turtle.getItemSpace(i) > 0) then return false; end
+			end
+			return true;
+		end
 		
 		local fuel = {};
 		fuel.manage = function()
@@ -72,6 +78,58 @@ if (filler == nil) then
 				fuel.manage();
 			until (not levelDelegate());
 		end
+		movement.dig = function(move, dig)
+			dig();
+			local count = 0;
+			while (not move()) do
+				count = count + 1;
+				if (count > 60) then return false; end
+				sleep(1);
+				dig();
+			end
+			return true;
+		end
+		movement.eat = function()
+			if (inventory.isFull()) then
+				print("Inventory is full");
+				return false;
+			end
+			
+			if (turtle.getItemCount(2) == 0) then
+				print("Place the type of block to eat in slot 2");
+				return false;
+			end
+
+			for searchCount = 0, 5 do
+				fuel.manage();
+				turtle.select(2);
+				turtle.turnRight();
+				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
+				turtle.turnLeft();
+				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
+				turtle.turnLeft();
+				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
+				turtle.turnLeft();
+				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
+				if (turtle.compareDown()) then return movement.dig(turtle.down, turtle.digDown); end
+				if (turtle.compareUp()) then return movement.dig(turtle.up, turtle.digUp); end
+				
+				for turns = 1, 4 do
+					turtle.turnRight();
+					if (not turtle.detect()) then
+						movement.dig(turtle.forward, function() return true; end);
+						break;
+					end
+				end
+			end
+			return false;
+		end
+		movement.unfill = function()
+			while (movement.eat) do
+				sleep(.01);
+			end
+			print("Turtle is full, blocked, or completed.");
+		end
 		
 		filler.fillUp = function()
 			movement.fill(turtle.up, turtle.placeDown);
@@ -79,6 +137,10 @@ if (filler == nil) then
 		
 		filler.fillDown = function()
 			movement.fill(turtle.down, turtle.placeUp);
+		end
+		
+		filler.unfill = function()
+			movement.unfill();
 		end
 		
 	end)();
