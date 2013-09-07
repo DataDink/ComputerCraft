@@ -4,6 +4,7 @@ if (builder == nil) then
 	(function()
 		local calc = {};
 		local collection = {};
+		local private = {};
 		local generate = {};
 	
 		-- calculations
@@ -249,7 +250,7 @@ if (builder == nil) then
 		generate.cone = function(radius, crossSection)
 			local result = {};
 			for z = -radius, radius do
-				local scale = 1 / radius * math.abs(z - radius);
+				local scale = 1 / radius * 2 * math.abs(z - radius);
 				for i, v in ipairs(crossSection) do
 					table.insert(result, {
 						x = v.x * scale,
@@ -362,7 +363,7 @@ if (builder == nil) then
 			return nil;
 		end
 		
-		builder.placeDown = function()
+		private.place = function(placeDelegate)
 			if (builder.findInventory() == nil) then
 				print("Waiting for inventory");
 				while (builder.findInventory() == nil) do
@@ -372,7 +373,19 @@ if (builder == nil) then
 				sleep(15);
 			end
 			turtle.select(builder.findInventory());
-			turtle.placeDown();
+			placeDelegate();
+		end
+		
+		builder.placeDown = function()
+			private.place(turtle.placeDown);
+		end
+		
+		builder.placeUp = function()
+			private.place(turtle.placeUp);
+		end
+		
+		builder.placeForward = function()
+			private.place(turtle.place);
 		end
 	
 	end)();
