@@ -49,10 +49,8 @@ if (filler == nil) then
 		movement.direction = true;
 		movement.nextRow = function()
 			local turn = turtle.turnLeft;
-			local unturn = turtle.turnRight;
 			if (movement.direction) then 
 				turn = turtle.turnRight;
-				unturn = turtle.turnLeft;
 			end
 			movement.direction = not movement.direction;
 			turn();
@@ -60,13 +58,6 @@ if (filler == nil) then
 				turn();
 				return true;
 			end
-			unturn();
-			unturn();
-			if (turtle.back()) then
-				unturn();
-				return true;
-			end
-			unturn();
 			return false;
 		end
 		movement.fill = function(levelDelegate, placeDelegate)
