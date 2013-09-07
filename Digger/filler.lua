@@ -9,6 +9,7 @@ if (filler == nil) then
 				if (turtle.getItemCount(i) > 0) then
 					turtle.select(i);
 					return true;
+				end
 			end
 			return false;
 		end
