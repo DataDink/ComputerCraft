@@ -59,6 +59,7 @@ if (filler == nil) then
 				turn();
 				return true;
 			end
+			turn();
 			return false;
 		end
 		movement.fill = function(levelDelegate, placeDelegate)
