@@ -111,8 +111,8 @@ if (filler == nil) then
 				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
 				turtle.turnLeft();
 				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
-				if (turtle.compareDown()) then return movement.dig(turtle.down, turtle.digDown); end
 				if (turtle.compareUp()) then return movement.dig(turtle.up, turtle.digUp); end
+				if (turtle.compareDown()) then return movement.dig(turtle.down, turtle.digDown); end
 				
 				for turns = 1, 4 do
 					turtle.turnRight();
