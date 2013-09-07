@@ -84,7 +84,7 @@ if (filler == nil) then
 			while (not move()) do
 				count = count + 1;
 				if (count > 60) then return false; end
-				sleep(1);
+				sleep(.25);
 				dig();
 			end
 			return true;
