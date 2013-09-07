@@ -23,6 +23,7 @@ if (filler == nil) then
 				sleep(15);
 			end
 			placeDelegate();
+			turtle.place();
 		end
 		
 		local fuel = {};
@@ -66,6 +67,7 @@ if (filler == nil) then
 					movement.fillRow(placeDelegate);
 					fuel.manage();
 				until (not movement.nextRow());
+				turtle.turnLeft();
 				fuel.manage();
 			until (not levelDelegate());
 		end
