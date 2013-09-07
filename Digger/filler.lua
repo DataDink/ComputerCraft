@@ -24,7 +24,7 @@ if (filler == nil) then
 			placeDelegate();
 		end
 		
-		local fuel = ();
+		local fuel = {};
 		fuel.manage = function()
 			if (turtle.getFuelLevel() > 0) then return true; end
 			turtle.select(1);
