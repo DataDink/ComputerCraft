@@ -30,7 +30,7 @@ if (filler == nil) then
 			turtle.select(1);
 			if (not turtle.refuel(1)) then
 				print("Awaiting Refuel");
-				while (not turtle.refuel(1)) then
+				while (not turtle.refuel(1)) do
 					sleep(5);
 					turtle.select(1);
 				end
