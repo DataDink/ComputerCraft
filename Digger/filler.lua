@@ -103,6 +103,7 @@ if (filler == nil) then
 			for searchCount = 0, 5 do
 				fuel.manage();
 				turtle.select(2);
+				if (turtle.compareUp()) then return movement.dig(turtle.up, turtle.digUp); end
 				turtle.turnRight();
 				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
 				turtle.turnLeft();
@@ -111,7 +112,6 @@ if (filler == nil) then
 				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
 				turtle.turnLeft();
 				if (turtle.compare()) then return movement.dig(turtle.forward, turtle.dig); end
-				if (turtle.compareUp()) then return movement.dig(turtle.up, turtle.digUp); end
 				if (turtle.compareDown()) then return movement.dig(turtle.down, turtle.digDown); end
 				
 				for turns = 1, 4 do
