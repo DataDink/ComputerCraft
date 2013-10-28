@@ -1,10 +1,3 @@
-if (configuration == nil) then
-	configuration = {
-		Username = "DataDink", -- Your username on github
-		Repository = "ComputerCraft" -- The repository to load files from
-	};
-end
-
 if (json == nil) then
 	json = {};
 	(function()
@@ -130,46 +123,3 @@ if (json == nil) then
 		
 	end)();
 end
-
-
-(function() 
-	local rawUrlRoot = "https://raw.github.com/" .. configuration.Username .. "/" .. configuration.Repository;
-	local blobUrlRoot = "https://github.com/" .. configuration.Username .. "/" .. configuration.Repository .. "/blob";
-	
-	local getRaw = function(fileInfo) 
-		return string.gsub(fileInfo["html_url"], blobUrlRoot, rawUrlRoot);
-	end
-
-	local rootUrl = "https://api.github.com/repos/" .. configuration.Username .. "/" .. configuration.Repository .. "/contents/";
-	local rootDir = json.parse(http.get(rootUrl).readAll());
-	
-	local loadDirectory = function(directory)
-		if (not fs.exists("file_cache")) then fs.makeDir("file_cache"); end
-		for index, fileInfo in pairs(directory) do
-			if (fileInfo.type == "file" and string.find(fileInfo.name, "%.lua$") ~= nil) then
-				local fileUrl = getRaw(fileInfo);
-				local fileRaw = http.get(fileUrl).readAll();
-				local cachePath = "file_cache/" .. fileInfo.name;
-				fs.delete(cachePath);
-				local cache = fs.open(cachePath, "w");
-				cache.write(fileRaw);
-				cache.close();
-				local loader = loadstring(fileRaw);
-				if (loader ~= nil) then loader();
-				else print("Could not parse " .. fileInfo.name); end
-			end
-		end
-	end
-	
-	loadDirectory(rootDir);
-	
-	local label = os.getComputerLabel();
-	if (label == nil) then return; end
-	local labelUrl = rootUrl .. label .. "/";
-	local labelData = http.get(labelUrl);
-	if (labelData == nil) then return; end
-	local labelDir = json.parse(labelData.readAll());
-	if (labelDir.message == "Not Found") then return; end
-	loadDirectory(labelDir);
-	
-end)();

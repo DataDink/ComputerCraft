@@ -4,16 +4,25 @@ local clear = function()
   print();
 end
 
-local select = function(compare)
+local slots = {};
+
+local init = function()
+	slots = {};
+	for i = 2, 16 do
+		if (turtle.getItemCount(i) > 0) then
+			table.insert(slot, i);
+		end
+	end
+end
+
+local select = function()
   while (true) do
-    for i = 2, 16 do
-      if (turtle.getItemCount(i) > 0) then
-        turtle.select(i);
-        if (compare == nil or not compare()) then
-          return;
-        end
-      end      
-    end
+    for _, index in ipairs(slots) do
+      if (turtle.getItemCount(index) > 1) then
+        turtle.select(index);
+		return;
+		end
+	end
 
     clear();    
     print('Please add more inventory');
@@ -36,7 +45,8 @@ local refuel = function(required)
 end
 
 local place = function(compare, dig, place)
-  select(compare);
+  select();
+  if (compare()) then return; end
   dig();
   place();
 end
@@ -49,7 +59,7 @@ local placeDown = function()
   place(turtle.compareDown, turtle.digDown, turtle.placeDown);
 end
 
-local placeFront = function()
+local placeForward = function()
   place(turtle.compare, turtle.dig, turtle.place);
 end
 
@@ -65,13 +75,13 @@ local digDown = function()
   dig(turtle.detectDown, turtle.digDown);
 end
 
-local digFront = function()
+local digForward = function()
   dig(turtle.detect, turtle.dig);
 end
 
-local move = function(move)
+local move = function(movement)
   refuel(1);
-  while (not move()) do sleep(1); end
+  while (not movement()) do sleep(1); end
 end
 
 local moveUp = function() 
@@ -84,8 +94,8 @@ local moveDown = function()
   move(turtle.down); 
 end
 
-local moveFront = function() 
-  digFront();
+local moveForward = function() 
+  digForward();
   move(turtle.forward); 
 end
 
@@ -94,48 +104,48 @@ local section = function()
   digUp();
   placeDown();
   turtle.turnRight();
-  moveFront();
+  moveForward();
   placeDown();
-  placeFront();
+  placeForward();
   moveUp();
-  placeFront();
+  placeForward();
   moveUp();
-  placeFront();
+  placeForward();
   placeUp();
   turtle.turnLeft();
   turtle.turnLeft();
-  moveFront();
+  moveForward();
   placeUp();
-  moveFront();
+  moveForward();
   placeUp();
-  placeFront();
+  placeForward);
   moveDown();
-  placeFront();
+  placeForward();
   moveDown();
-  placeFront();
+  placeForward();
   placeDown();
   turtle.turnRight();
   turtle.turnRight();
-  moveFront();
+  moveForward();
   turtle.turnLeft();
-  moveFront();
+  moveForward();
 end
 
 local tunnel = function(distance)
   for i = 1, distance do
     section();
-    moveFront();
+    moveForward();
   end
 end
 
 local cornerFrame = function(place, dig)
   turtle.turnRight();
   for side = 1, 4 do
-    moveFront();
+    moveForward();
     place();
     dig();
     turtle.turnLeft();
-    moveFront();
+    moveForward();
     place();
     dig();
   end
@@ -146,7 +156,7 @@ local corner = function()
   cornerFrame(placeDown, digUp);
   moveUp(); moveUp(); 
   cornerFrame(placeUp, digDown);
-  moveFront();
+  moveForward();
   placeUp();
   moveDown();
   moveDown();
@@ -162,18 +172,19 @@ while (true) do
   print('2. Tunnel Down');
   
   local _, char = os.pullEvent('char');
+  init();
   if (char == '4') then
     clear();
     print('Building Corner');
     corner();
     turtle.turnLeft();
-    moveFront(); moveFront();
+    moveForward(); moveForward();
   elseif (char == '6') then
     clear();
     print('Building Corner');
     corner();
     turtle.turnRight();
-    moveFront(); moveFront();
+    moveForward(); moveForward();
   else
     clear();
     print('How far? ');
