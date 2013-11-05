@@ -1,7 +1,6 @@
 local clear = function()
-  print(shell);
-  print(term);
-  shell.run('clear');
+  term.clear();
+  term.setCursorPos(1, 1);
   print('==== Tunnel Maker ====');
   print();
 end
