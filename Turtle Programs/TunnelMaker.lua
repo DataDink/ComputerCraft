@@ -118,7 +118,7 @@ local section = function()
   placeUp();
   moveForward();
   placeUp();
-  placeForward);
+  placeForward();
   moveDown();
   placeForward();
   moveDown();
