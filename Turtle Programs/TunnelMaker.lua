@@ -12,7 +12,7 @@
 		slots = {};
 		for i = 2, 16 do
 			if (turtle.getItemCount(i) > 0) then
-				table.insert(slot, i);
+				table.insert(slots, i);
 			end
 		end
 	end
